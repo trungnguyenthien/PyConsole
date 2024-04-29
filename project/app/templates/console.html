@@ -3,16 +3,75 @@
 
   <head>
     <title>Pass Array to JavaScript</title>
+    <style>
+      /* Định dạng bảng và cho phép cuộn nội dung */
+      .scrollable-table {
+        height: 100vh;
+        /* Thiết lập chiều cao bằng chiều cao viewport */
+        overflow-y: auto;
+        display: block;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+
+      /* Cố định chiều rộng của các cột Timestamp và Request Time */
+      #logsTable th:nth-child(1),
+      #logsTable td:nth-child(1),
+      #logsTable th:nth-child(2),
+      #logsTable td:nth-child(2) {
+        width: 100px;
+      }
+    </style>
   </head>
 
   <body>
     <h1>Using Python Array in JavaScript</h1>
+    {{ logs_json|json_script:"logs_data" }}
 
-    {{ logs|json_script:"logs_data" }}
+    <div class="scrollable-table">
+      <table id="logsTable">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Request Time</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dữ liệu sẽ được thêm vào đây bởi JavaScript -->
+        </tbody>
+      </table>
+    </div>
 
     <script>
-      var logs = JSON.parse(document.getElementById('logs_data').textContent);
-      console.log(logs);
+      var logs_data_textContent = document.getElementById('logs_data').textContent;
+      var logs = JSON.parse(JSON.parse(logs_data_textContent));
+
+      // Hàm để thêm dòng vào bảng
+      function addRowToTable(timestamp, requestTime, data) {
+        var table = document.getElementById("logsTable").getElementsByTagName('tbody')[0];
+        var newRow = table.insertRow(table.rows.length);
+        newRow.innerHTML = "<td>" + timestamp + "</td><td>" + requestTime + "</td><td><pre>" + JSON.stringify(data, null, 2) + "</pre></td>";
+      }
+
+      // Duyệt qua mỗi log và thêm vào bảng
+      logs.forEach(log => {
+        addRowToTable(
+          log.timestamp, // chỉ hiển thị thời gian
+          log.request_time, // chỉ hiển thị thời gian
+          log.data
+        );
+      });
     </script>
   </body>
 

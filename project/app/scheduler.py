@@ -4,7 +4,7 @@ from .log import log
 
 def print_current_time():
     now = datetime.now()
-    current_time = now.strftime("Now is %Y-%m-%d %H-%M-%S")
+    current_time = now.strftime("Now is %Y-%m-%d %H:%M:%S")
     log(current_time)
 
 def start():
