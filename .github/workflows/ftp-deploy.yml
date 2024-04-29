@@ -5,7 +5,7 @@ on:
 
 name: 🚀 Deploy website on push
 jobs:
-  web-deploy:
+  ftpdeploy:
     name: 🎉 FTP Deploy
     runs-on: ubuntu-latest
     steps:
@@ -24,17 +24,32 @@ jobs:
           **/.git*/**
           **/node_modules/**
           fileToExclude.txt
-    
-    - name: 🚚 Get latest code
+  
+  checkout:  
+    needs: ftpdeploy
+    name: 🚚 Get latest code
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
       uses: actions/checkout@v4
       with:
         ref: 'slack'
-
-    - name: Setup Python
+  
+  setUpPython:  
+    needs: checkout
+    name: 🚚 Setup Python
+    runs-on: ubuntu-latest
+    steps:
+    - name: setUpPython
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-      
+
+  install:     
+    needs: setUpPython
+    name: 🚚 INSTALL
+    runs-on: ubuntu-latest
+    steps:
     - name: 🔨 Build Project
       run: |
         cd projects/
