@@ -9,6 +9,10 @@ jobs:
     name: 🎉 FTP Deploy
     runs-on: ubuntu-latest
     steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+      with:
+        ref: 'slack'
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.3
       with:
@@ -24,16 +28,6 @@ jobs:
           **/.git*/**
           **/node_modules/**
           fileToExclude.txt
-  
-  checkout:  
-    needs: ftpdeploy
-    name: 🚚 Get latest code
-    runs-on: ubuntu-latest
-    steps:
-    - name: checkout
-      uses: actions/checkout@v4
-      with:
-        ref: 'slack'
   
   setUpPython:  
     needs: checkout
