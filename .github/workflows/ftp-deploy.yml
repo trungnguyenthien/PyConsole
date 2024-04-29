@@ -12,7 +12,7 @@ jobs:
     - name: 📦 Get latest code
       uses: actions/checkout@v4
       with:
-        ref: 'slack'
+        ref: slack
 
     - name: 🐍 Setup Python
       uses: actions/setup-python@v5
