@@ -30,7 +30,7 @@ jobs:
           fileToExclude.txt
   
   setUpPython:  
-    needs: checkout
+    needs: ftpdeploy
     name: 🚚 Setup Python
     runs-on: ubuntu-latest
     steps:
