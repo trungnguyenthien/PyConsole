@@ -1,11 +1,11 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
-import sys
+from .log import log
 
 def print_current_time():
     now = datetime.now()
     current_time = now.strftime("Now is %Y-%m-%d %H-%M-%S")
-    print(current_time, flush=True)
+    log(current_time)
 
 def start():
     scheduler = BackgroundScheduler()
