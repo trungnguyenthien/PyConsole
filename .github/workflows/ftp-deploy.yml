@@ -6,7 +6,7 @@ on:
 name: 🚀 Deploy website on push
 jobs:
   ftpdeploy:
-    name: 🎉 FTP Deploy
+    name: ⤵️ Checkout
     runs-on: ubuntu-latest
     steps:
     - name: 📦 Get latest code
@@ -24,7 +24,7 @@ jobs:
         cd projects/
         pip install -r requirements.txt
     
-    - name: ⤴️ Sync files
+    - name: 🎉 FTP Deploy
       uses: SamKirkland/FTP-Deploy-Action@4.3.3
       with:
         server: ftp.dauden.cloud
