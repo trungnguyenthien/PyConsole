@@ -9,11 +9,22 @@ jobs:
     name: 🎉 FTP Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: 🚚 Get latest code
+    - name: 📦 Get latest code
       uses: actions/checkout@v4
       with:
         ref: 'slack'
-    - name: 📂 Sync files
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: 🔨 Build Project
+      run: |
+        cd projects/
+        pip install -r requirements.txt
+    
+    - name: ⤴️ Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.3
       with:
         server: ftp.dauden.cloud
@@ -28,23 +39,3 @@ jobs:
           **/.git*/**
           **/node_modules/**
           fileToExclude.txt
-  
-  setUpPython:  
-    needs: ftpdeploy
-    name: 🚚 Setup Python
-    runs-on: ubuntu-latest
-    steps:
-    - name: setUpPython
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-
-  install:     
-    needs: setUpPython
-    name: 🚚 INSTALL
-    runs-on: ubuntu-latest
-    steps:
-    - name: 🔨 Build Project
-      run: |
-        cd projects/
-        pip install -r requirements.txt
