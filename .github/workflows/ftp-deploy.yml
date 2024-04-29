@@ -9,34 +9,32 @@ jobs:
     name: ⤵️ Checkout
     runs-on: ubuntu-latest
     steps:
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-      
-      - name: 📦 Get latest code
-        uses: actions/checkout@v4
-        with:
-          ref: slack
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: 📦 Get latest code and Build Project
+      uses: actions/checkout@v4
+      with:
+        ref: slack
+    - name: 🔨 Build Project
+      run: |
+        cd projects/
+        pip install -r requirements.txt
 
-      - name: 🔨 Build Project
-        run: |
-          pip install -r requirements.txt
-        working-directory: projects/  # Thiết lập thư mục làm việc cho step này
-
-      - name: 🎉 FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-        with:
-          server: ftp.dauden.cloud
-          port: 21
-          protocol: ftp
-          username: ${{ secrets.ftp_username }}
-          password: ${{ secrets.ftp_password }}
-          server-dir: pyapp/slack/
-          local-dir: ./
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            fileToExclude.txt
-          working-directory: projects/  # Nếu FTP Deploy cần thực hiện từ thư mục projects
+    - name: 🎉 FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      with:
+        server: ftp.dauden.cloud
+        port: 21
+        protocol: ftp
+        username: ${{ secrets.ftp_username }}
+        password: ${{ secrets.ftp_password }}
+        server-dir: pyapp/slack/
+        local-dir: ./
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          fileToExclude.txt
