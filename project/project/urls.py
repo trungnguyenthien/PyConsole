@@ -16,7 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from app import views as app_views
+from app import consumers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('web_console/', app_views.console, name='web_console'), # TRONG MÔI TRƯỜNG PRODUCTION NÊN CHẶN ROUTING ĐẾN console.html
+    path('', app_views.home, name='home'),
+]
+
+websocket_urlpatterns = [
+    path('ws_console/', consumers.TerminalConsumer.as_asgi(), name='ws_console'),
 ]

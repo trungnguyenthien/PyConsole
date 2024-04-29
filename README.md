@@ -1,9 +1,14 @@
 ## 1) Install (Only 1 time after checking source)
 
-Create Environment & install package
+Create Environment
 
 ```sh
 python -m venv env
+```
+
+### 📔 Install / Update Package
+
+```sh
 source env/bin/activate # Active môi trường
 pip install -r requirements.txt
 deactivate # Deactivate
@@ -22,10 +27,8 @@ deactivate
 ## 3) Build / Run
 
 ```sh
-# Build
-
-# Run
-
+# Run (cd to project)
+python manage.py runserver --noreload
 ```
 
 ## 4) Other

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Console</title>
+  </head>
+
+  <body>
+    <h1>Terminal Output</h1>
+    <textarea id="log" cols="100" rows="20"></textarea>
+    <script>
+      var ws = new WebSocket('ws://' + window.location.host + '/ws_console');
+
+      ws.onopen = function () {
+        console.log('Connection is open...');
+      };
+
+      ws.onerror = function (error) {
+        // Kiểm tra xem đối tượng event có thuộc tính 'message' không
+        if (event && event.message) {
+          console.log('WebSocket Error: ' + event.message);
+        } else {
+          // Nếu không có thông tin chi tiết, log toàn bộ đối tượng event
+          console.log('WebSocket Error: An unknown error occurred.');
+          console.log(event);
+        }
+      };
+
+
+      ws.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        var log = document.getElementById('log');
+        log.value += data.message + "\n";
+      };
+
+      ws.onclose = function (e) {
+        console.error('Socket closed unexpectedly');
+      };
+    </script>
+  </body>
+
+</html>
