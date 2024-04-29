@@ -5,7 +5,7 @@ from .log import log
 def print_current_time():
     now = datetime.now()
     current_time = now.strftime("Now is %Y-%m-%d %H:%M:%S")
-    log(current_time)
+    log({"colunm": 1, "current_time": current_time})
 
 def start():
     scheduler = BackgroundScheduler()

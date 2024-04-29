@@ -35,16 +35,15 @@
   </head>
 
   <body>
-    <h1>Using Python Array in JavaScript</h1>
     {{ logs_json|json_script:"logs_data" }}
 
     <div class="scrollable-table">
       <table id="logsTable">
         <thead>
           <tr>
-            <th>Timestamp</th>
-            <th>Request Time</th>
-            <th>Data</th>
+            <th>LogTime</th>
+            <th>RequestAt</th>
+            <th>Message</th>
           </tr>
         </thead>
         <tbody>
