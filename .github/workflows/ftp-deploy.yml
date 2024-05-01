@@ -26,7 +26,7 @@ jobs:
     - name: 🔨 Install dependencies
       run: |
         ls -l
-        cd projects/
+        cd project
         pip install -r requirements.txt
 
     - name: 🎉 FTP Deploy
