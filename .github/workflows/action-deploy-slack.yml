@@ -33,7 +33,7 @@ jobs:
         protocol: ftp
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: pyapp/slack/
+        server-dir: py/slack/
         local-dir: ./
         exclude: |
           **/.git*
