@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-&s1i(v_4=yi8+v!5u(@z7wi*4y0zs##k36ael5xd14=wm8lr67
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Cài đặt ALLOWED_HOSTS giúp bảo vệ ứng dụng của bạn khỏi những kẻ tấn công có thể gửi yêu cầu đến server với một HTTP Host header giả mạo. Nếu ALLOWED_HOSTS không được cấu hình đúng, ứng dụng của bạn có thể dễ dàng trở thành mục tiêu của các cuộc tấn công như DNS rebinding hoặc các cuộc tấn công có mục đích khai thác những cấu hình lỏng lẻo liên quan đến quản lý domain và subdomain.
 ALLOWED_HOSTS = ["127.0.0.1", "dauden.cloud"]
+
 # STATIC_ROOT là đường dẫn đến thư mục trên server của bạn nơi tất cả các tệp tĩnh sẽ được thu thập và lưu trữ khi bạn chạy lệnh collectstatic. Lệnh này là một phần của quá trình triển khai ứng dụng Django, và nó sẽ tìm kiếm các tệp tĩnh trong tất cả các ứng dụng của dự án Django của bạn (và cả trong các thư viện/thành phần bên thứ ba mà dự án sử dụng), sau đó sao chép tất cả các tệp này vào thư mục STATIC_ROOT.
 STATIC_ROOT = '/home/tsrqcmjv/public_html/pyslack'
 

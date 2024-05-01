@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from . import log
 import json
+from .slack_event import slack_events
 
 # Create your views here.
 def console(request):
@@ -18,3 +19,6 @@ def console(request):
 def home(request):
     text = f"<h1>THIS HOMEPAGE</h1>"
     return HttpResponse(text)
+
+def slack_hook(request):
+    return slack_events(request)
