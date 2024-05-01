@@ -1,6 +1,5 @@
 # views.py
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from slack_sdk.signature import SignatureVerifier
 from slack_sdk.errors import SlackRequestError
 from .log import log
@@ -11,7 +10,6 @@ SLACK_SIGNING_SECRET = "aaf005f370e572a9a98951d01dcf146e"
 # Tạo đối tượng SignatureVerifier
 signature_verifier = SignatureVerifier(SLACK_SIGNING_SECRET)
 
-@csrf_exempt
 def slack_events(request):
     # Lấy dữ liệu từ yêu cầu Slack
     body = request.body.decode("utf-8")
@@ -23,10 +21,12 @@ def slack_events(request):
         is_valid = signature_verifier.is_valid_request(body, headers)
     except SlackRequestError as e:
         # Xử lý lỗi xác minh
+        log(HttpResponse(str(e), status=403))
         return HttpResponse(str(e), status=403)
 
     if not is_valid:
         # Yêu cầu không hợp lệ
+        log(HttpResponse("Invalid request", status=403))
         return HttpResponse("Invalid request", status=403)
 
     # Xử lý sự kiện xác minh từ Slack
