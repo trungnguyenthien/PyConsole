@@ -22,6 +22,7 @@ def slack_events(request):
     json_data = json.loads(request.body)
     
     # Kiểm tra loại sự kiện
+    # TODO: Bước này đang bypass việc kiểm tra
     if 'type' in json_data and json_data['type'] == 'url_verification':
         # Trả lại challenge code mà Slack gửi
         return JsonResponse({'challenge': json_data['challenge']})
