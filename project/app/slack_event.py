@@ -15,10 +15,12 @@ def slack_events(request):
     body = request.body.decode("utf-8")
     headers = dict(request.headers)
     log(body)
+    log(headers)
 
     # Xác minh yêu cầu từ Slack
     try:
         is_valid = signature_verifier.is_valid_request(body, headers)
+        log("is_valid " + is_valid)
     except SlackRequestError as e:
         # Xử lý lỗi xác minh
         log(HttpResponse(str(e), status=403))
