@@ -37,3 +37,12 @@ python manage.py runserver --noreload
 # Update requirements.txt
 pip freeze > requirements.txt
 ```
+
+## 5) Setup in CPanel
+
+After push app to FTP
+Open terminal then
+
+```
+source /home/tsrqcmjv/virtualenv/pyapp/slack/project/3.5/bin/activate && cd /home/tsrqcmjv/pyapp/slack/project && pip install -r requirements.txt
+```
