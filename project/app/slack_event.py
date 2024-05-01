@@ -23,7 +23,7 @@ def slack_events(request):
         log("is_valid " + is_valid)
     except SlackRequestError as e:
         # Xử lý lỗi xác minh
-        log(HttpResponse(str(e), status=403))
+        log(403)
         return HttpResponse(str(e), status=403)
 
     if not is_valid:
