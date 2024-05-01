@@ -5,7 +5,7 @@ from . import log
 import json
 
 # Create your views here.
-def log(request):
+def console(request):
     logs = log.all_logs()
     # Chuyển đổi danh sách LogItem thành danh sách các dictionary
     logs_dict = [log.to_dict() for log in logs]
