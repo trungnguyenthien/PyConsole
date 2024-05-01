@@ -20,6 +20,6 @@ from app import views as app_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('web_console/', app_views.console, name='web_console'), # TRONG MÔI TRƯỜNG PRODUCTION NÊN CHẶN ROUTING ĐẾN console.html
+    path('log/', app_views.log, name='log'), # TRONG MÔI TRƯỜNG PRODUCTION NÊN CHẶN ROUTING ĐẾN console.html
     path('', app_views.home, name='home'),
 ]
