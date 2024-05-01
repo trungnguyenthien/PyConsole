@@ -44,5 +44,5 @@ After push app to FTP
 Open terminal then
 
 ```
-source /home/tsrqcmjv/virtualenv/pyapp/slack/project/3.5/bin/activate && cd /home/tsrqcmjv/pyapp/slack/project && pip install -r requirements.txt
+source /home/tsrqcmjv/virtualenv/py/slack/project/3.8/bin/activate && cd /home/tsrqcmjv/py/slack/project && pip install -r requirements.txt
 ```
