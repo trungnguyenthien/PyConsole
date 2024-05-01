@@ -19,9 +19,13 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: slack
+    
+    - name: List directories
+      run: ls -l  # Thêm bước này để liệt kê các thư mục và file trong repo
 
     - name: 🔨 Install dependencies
       run: |
+        ls -l
         cd projects/
         pip install -r requirements.txt
 
