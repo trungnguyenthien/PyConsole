@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from . import log
 import json
 from .slack_event import slack_events
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def console(request):
@@ -20,5 +21,6 @@ def home(request):
     text = f"<h1>THIS HOMEPAGE</h1>"
     return HttpResponse(text)
 
+@csrf_exempt
 def slack_hook(request):
     return slack_events(request)
