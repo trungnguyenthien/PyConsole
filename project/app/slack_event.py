@@ -5,7 +5,7 @@ from slack_sdk.errors import SlackRequestError
 from .log import log
 
 # Thay thế bằng Signing Secret của ứng dụng Slack
-SLACK_SIGNING_SECRET = "aaf005f370e572a9a98951d01dcf146e"
+SLACK_SIGNING_SECRET = "3135f508999027a39f18c8c0d3a297a0"
 
 # Tạo đối tượng SignatureVerifier
 signature_verifier = SignatureVerifier(SLACK_SIGNING_SECRET)
