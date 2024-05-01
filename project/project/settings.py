@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-&s1i(v_4=yi8+v!5u(@z7wi*4y0zs##k36ael5xd14=wm8lr67
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["dauden.cloud"]
+STATIC_ROOT = '/home/tsrqcmjv/public_html/pyslack'
 
 
 # Application definition
