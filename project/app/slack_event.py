@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from slack_sdk.signature import SignatureVerifier
 from slack_sdk.errors import SlackRequestError
 from .log import log
+from django.http import JsonResponse
+import json
 
 # Thay thế bằng Signing Secret của ứng dụng Slack
 SLACK_SIGNING_SECRET = "3135f508999027a39f18c8c0d3a297a0"
@@ -17,25 +19,12 @@ def slack_events(request):
     log(body)
     log(headers)
 
-    # Xác minh yêu cầu từ Slack
-    try:
-        is_valid = signature_verifier.is_valid_request(body, headers)
-        log("is_valid " + is_valid)
-    except SlackRequestError as e:
-        # Xử lý lỗi xác minh
-        log(403)
-        return HttpResponse(str(e), status=403)
-
-    if not is_valid:
-        # Yêu cầu không hợp lệ
-        log(HttpResponse("Invalid request", status=403))
-        return HttpResponse("Invalid request", status=403)
-
-    # Xử lý sự kiện xác minh từ Slack
-    event = request.GET.get("event", {})
-    if "challenge" in event:
-        # Gửi phản hồi xác minh
-        return HttpResponse(event["challenge"], status=200)
+    json_data = json.loads(request.body)
+    
+    # Kiểm tra loại sự kiện
+    if 'type' in json_data and json_data['type'] == 'url_verification':
+        # Trả lại challenge code mà Slack gửi
+        return JsonResponse({'challenge': json_data['challenge']})
 
     # Xử lý các sự kiện khác từ Slack
     # ...
