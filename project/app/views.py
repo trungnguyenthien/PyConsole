@@ -1,15 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
-from .log import log
-from .log import all_logs
+from . import log as logger
 import json
 from .slack_event import slack_events
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def console(request):
-    logs = all_logs()
+    logs = logger.all_logs()
     # Chuyển đổi danh sách LogItem thành danh sách các dictionary
     logs_dict = [log.to_dict() for log in logs]
     # Serialize danh sách dictionary thành JSON
@@ -25,6 +24,6 @@ def home(request):
 @csrf_exempt
 def slack_hook(request):
     if request.method != 'POST':
-        log(JsonResponse({'error': 'Only POST method is allowed.'}, status=405))
+        logger.log(JsonResponse({'error': 'Only POST method is allowed.'}, status=405))
         return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
     return slack_events(request)
