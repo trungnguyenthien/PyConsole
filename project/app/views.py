@@ -23,4 +23,7 @@ def home(request):
 
 @csrf_exempt
 def slack_hook(request):
+    if request.method != 'POST':
+        log(JsonResponse({'error': 'Only POST method is allowed.'}, status=405))
+        return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
     return slack_events(request)
