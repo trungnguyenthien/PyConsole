@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
-from . import log
+from .log import log
 import json
 from .slack_event import slack_events
 from django.views.decorators.csrf import csrf_exempt
