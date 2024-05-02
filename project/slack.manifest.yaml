@@ -20,6 +20,7 @@ features:
 oauth_config:
   scopes:
     bot:
+      - channels:join # Bot có thể join channel
       # channels:history và channels:read cho phép bot đọc tin nhắn từ các channel công khai mà bot là thành viên.
       - channels:history
       - channels:read
@@ -37,9 +38,10 @@ oauth_config:
       # reactions:read, reactions:write cho phép ứng dụng của bạn read/write các phản ứng (reactions) đã được thêm vào các tin nhắn.
       - reactions:read
       - reactions:write
+
 settings:
   event_subscriptions:
-    request_url: https://dauden.cloud/pyslack/slack_hook
+    request_url: https://dauden.cloud/pyslack/events
     bot_events:
       - message.channels
       - message.groups
