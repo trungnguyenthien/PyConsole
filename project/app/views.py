@@ -23,5 +23,4 @@ def home(request):
 
 @csrf_exempt
 def slack_hook(request):
-    log("Receive Request")
     return slack_events(request)
