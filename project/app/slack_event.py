@@ -8,6 +8,7 @@ import json
 
 # Thay thế bằng Signing Secret của ứng dụng Slack
 SLACK_SIGNING_SECRET = "3135f508999027a39f18c8c0d3a297a0"
+# xoxb-356896431271-7054590596066-G0Q4LHfxB1oBXKFxHTFaWmrs
 
 # Tạo đối tượng SignatureVerifier
 signature_verifier = SignatureVerifier(SLACK_SIGNING_SECRET)
