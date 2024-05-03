@@ -14,16 +14,15 @@ SLACK_SIGNING_SECRET = "3135f508999027a39f18c8c0d3a297a0"
 signature_verifier = SignatureVerifier(SLACK_SIGNING_SECRET)
 
 def slack_events(request):
-    # Lấy dữ liệu từ yêu cầu Slack
+  # Lấy dữ liệu từ yêu cầu Slack
     body = request.body.decode("utf-8")
     headers = dict(request.headers)
     log(body)
     log(headers)
 
-    json_data = json.loads(request.body)
+    json_data = json.loads(body)
     
     # Kiểm tra loại sự kiện
-    # TODO: Bước này đang bypass việc kiểm tra
     if 'type' in json_data and json_data['type'] == 'url_verification':
         # Trả lại challenge code mà Slack gửi
         return JsonResponse({'challenge': json_data['challenge']})
