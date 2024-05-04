@@ -17,23 +17,28 @@ def slack_events(request):
 
     json_data = json.loads(body)
     
+    
     # Kiểm tra loại sự kiện
     if 'type' in json_data and json_data['type'] == 'url_verification':
         # Trả lại challenge code mà Slack gửi
         return JsonResponse({'challenge': json_data['challenge']})
 
-    # TODO: Print messsage từ event "message"
+    event_type = json_data['event']['type']
     # Kiểm tra sự kiện "message" và xử lý
-    if 'event' in json_data and json_data['event']['type'] == 'message':
-        # Trích xuất và log tin nhắn
-        message_text = json_data['event']["message"].get('text', 'No message text provided')
-        log("Received message: " + message_text)
-        print("Received message: " + message_text)  # In ra console
+    if event_type == 'message':
+        return _handle_message_event(json_data)
+    else:
+        return HttpResponse("NOT YET HANDLE THIS EVENT", status=200)
 
 
+
+def _handle_message_event(json_data):
+    # Trích xuất và log tin nhắn
+    message_text = json_data['event']["message"].get('text', 'No message text provided')
+    log("Received message: " + message_text)
     return HttpResponse("OK", status=200)
 
-
+### BOT FUNCTIONS ----------------------------------------------------------------
 client = WebClient(token='xoxb-356896431271-7054590596066-8JWCx92HQecY7RiovsecRaXY')
 
 # Example usage:

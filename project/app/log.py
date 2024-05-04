@@ -35,3 +35,4 @@ def log(data, request_time = datetime.now()):
         _log_queue.pop(0)
     # Thêm dữ liệu mới vào cuối của _log_queue
     _log_queue.append(LogItem(datetime.now(), request_time, data))
+    print(data)
