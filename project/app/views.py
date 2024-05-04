@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from . import log as logger
 import json
-from .slack_event import slack_events
+from .slack_manager import slack_events
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
