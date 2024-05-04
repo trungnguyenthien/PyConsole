@@ -26,7 +26,7 @@ def slack_events(request):
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
         # Trích xuất và log tin nhắn
-        message_text = json_data['event'].get('text', 'No message text provided')
+        message_text = json_data['event']["message"].get('text', 'No message text provided')
         log("Received message: " + message_text)
         print("Received message: " + message_text)  # In ra console
 
