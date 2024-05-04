@@ -33,14 +33,18 @@ def slack_events(request):
 def handle_message_event(json_data):
     log("EVENT MESSAGE 1")
     # Trích xuất và log tin nhắn
+    channel_id = json_data.get('team_id', '')
+
     message_text = json_data['event']['message'].get('text', '')
     ts = json_data['event']['message']['edited'].get('ts', '')
+    is_edited = True
+    
     if message_text == '':
         ts = json_data['event'].get('ts', '')
         message_text = json_data['event'].get('text', '')
+        is_edited = False
     
-    log("Received message: " + message_text + f"\n\n ts = {ts}")
-    log("EVENT MESSAGE 2")
+    log(f"Received message: {message_text} \n\n ts = {ts} \n\n channel_id = {channel_id}")
     return HttpResponse("OK", status=200)
 
 ### BOT FUNCTIONS ----------------------------------------------------------------
