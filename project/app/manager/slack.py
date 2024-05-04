@@ -27,11 +27,11 @@ def slack_events(request):
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
         log("EVENT MESSAGE")
-        return _handle_message_event(json_data)
+        return handle_message_event(json_data)
     else:
         return HttpResponse("NOT YET HANDLE THIS EVENT", status=200)
 
-def _handle_message_event(json_data):
+def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     message_text = json_data['event']["message"].get('text', 'No message text provided')
     log("Received message: " + message_text)
