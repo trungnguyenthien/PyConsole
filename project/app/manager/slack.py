@@ -44,7 +44,7 @@ def handle_message_event(json_data):
         message_text = json_data['event'].get('text', '')
         is_edited = False
     
-    log(f"Received message: {message_text} \n\n ts = {ts} \n\n channel_id = {channel_id}")
+    log(f"Received message: {message_text} \n ts = {ts} \n channel_id = {channel_id} \n is_edited = {is_edited}")
     return HttpResponse("OK", status=200)
 
 ### BOT FUNCTIONS ----------------------------------------------------------------
