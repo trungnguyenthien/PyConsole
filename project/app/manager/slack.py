@@ -23,9 +23,9 @@ def slack_events(request):
         # Trả lại challenge code mà Slack gửi
         return JsonResponse({'challenge': json_data['challenge']})
 
-    event_type = json_data['event']['type']
+    # event_type = json_data['event']['type']
     # Kiểm tra sự kiện "message" và xử lý
-    if event_type == 'message':
+    if 'event' in json_data and json_data['event']['type'] == 'message':
         return _handle_message_event(json_data)
     else:
         return HttpResponse("NOT YET HANDLE THIS EVENT", status=200)
