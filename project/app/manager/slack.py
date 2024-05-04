@@ -17,7 +17,6 @@ def slack_events(request):
 
     json_data = json.loads(body)
     
-    
     # Kiểm tra loại sự kiện
     if 'type' in json_data and json_data['type'] == 'url_verification':
         # Trả lại challenge code mà Slack gửi
@@ -32,6 +31,7 @@ def slack_events(request):
         return HttpResponse("NOT YET HANDLE THIS EVENT", status=200)
 
 def handle_message_event(json_data):
+    log("EVENT MESSAGE 1")
     # Trích xuất và log tin nhắn
     message_text = json_data['event']["message"].get('text', 'No message text provided')
     log("Received message: " + message_text)
