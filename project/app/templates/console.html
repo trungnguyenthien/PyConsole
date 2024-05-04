@@ -31,6 +31,26 @@
       #logsTable td:nth-child(2) {
         width: 100px;
       }
+
+      .key {
+        color: orange;
+      }
+
+      .string {
+        color: green;
+      }
+
+      .number {
+        color: darkblue;
+      }
+
+      .boolean {
+        color: blue;
+      }
+
+      .null {
+        color: magenta;
+      }
     </style>
   </head>
 
@@ -67,11 +87,11 @@
         cell1.textContent = timestamp;
         cell2.textContent = requestTime;
 
-        // Sử dụng pre cho JSON hoặc văn bản thường
         var pre = document.createElement('pre');
-        pre.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
+        pre.innerHTML = syntaxHighlight(data);  // Dùng innerHTML thay vì textContent
         cell3.appendChild(pre);
       }
+
 
       // Duyệt qua mỗi log và thêm vào bảng
       logs.forEach(log => {
@@ -81,6 +101,30 @@
           log.data
         );
       });
+
+
+      function syntaxHighlight(json) {
+        if (typeof json != 'string') {
+          json = JSON.stringify(json, undefined, 2);
+        }
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*(?:[eE][+-]?\d+)?)?)/g, function (match) {
+          var cls = 'number';
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'key';
+            } else {
+              cls = 'string';
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+          } else if (/null/.test(match)) {
+            cls = 'null';
+          }
+          return '<span class="' + cls + '">' + match + '</span>';
+        });
+      }
+
     </script>
   </body>
 
