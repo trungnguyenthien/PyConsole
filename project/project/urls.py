@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('log/', app_views.console, name='log'), # TRONG MÔI TRƯỜNG PRODUCTION NÊN CHẶN ROUTING ĐẾN console.html
     path('', app_views.home, name='home'),
-    path('events', app_views.slack_hook, name='events'),
+    path('events/', app_views.slack_hook, name='events'),
 ]
