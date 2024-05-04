@@ -1,4 +1,4 @@
-from .log import log
+from .utils.log import log
 
 class RequestLoggerMiddleware:
     def __init__(self, get_response):

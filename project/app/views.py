@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
-from . import log as logger
+from .utils import log as logger
 import json
-from .slack_manager import slack_events
+from .manager import slack as slackManager
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
@@ -26,4 +26,4 @@ def slack_hook(request):
     if request.method != 'POST':
         logger.log({'error': 'Only POST method is allowed.'})
         return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
-    return slack_events(request)
+    return slackManager.slack_events(request)

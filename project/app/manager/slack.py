@@ -1,6 +1,6 @@
 # views.py
 from django.http import HttpResponse
-from .log import log
+from ..utils.log import log
 from django.http import JsonResponse
 import json
 from slack_sdk import WebClient
@@ -29,8 +29,6 @@ def slack_events(request):
         return _handle_message_event(json_data)
     else:
         return HttpResponse("NOT YET HANDLE THIS EVENT", status=200)
-
-
 
 def _handle_message_event(json_data):
     # Trích xuất và log tin nhắn
