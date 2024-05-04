@@ -34,12 +34,12 @@ def handle_message_event(json_data):
     log("EVENT MESSAGE 1")
     # Trích xuất và log tin nhắn
     channel_id = json_data.get('team_id', '')
-
-    message_text = json_data['event']['message'].get('text', '')
-    ts = json_data['event']['message']['edited'].get('ts', '')
-    is_edited = True
     
-    if message_text == '':
+    try:
+        message_text = json_data['event']['message'].get('text', '')
+        ts = json_data['event']['message']['edited'].get('ts', '')
+        is_edited = True
+    except:
         ts = json_data['event'].get('ts', '')
         message_text = json_data['event'].get('text', '')
         is_edited = False
