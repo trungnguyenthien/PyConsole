@@ -35,6 +35,7 @@ def _handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     message_text = json_data['event']["message"].get('text', 'No message text provided')
     log("Received message: " + message_text)
+    log("EVENT MESSAGE 2")
     return HttpResponse("OK", status=200)
 
 ### BOT FUNCTIONS ----------------------------------------------------------------
