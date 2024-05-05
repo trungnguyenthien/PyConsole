@@ -30,7 +30,7 @@ async def request_text(system_specs, assistant_specs, user_message):
               # request_timeout=60,  # Thời gian chờ tối đa (giây)
           )
     except Exception as e:
-      print(f"An error occurred while generating response: {e}")
+      logger.log(f"An error occurred while generating response: {e}")
     
     logger.log(f"response-----------\n{response}")
     reply = response.choices[0].message["content"]
