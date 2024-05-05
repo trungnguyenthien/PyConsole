@@ -1,9 +1,9 @@
 
-from . import secret as secret_service
+from ..utils import secret as secret
 from ..utils import log as logger
 import openai
 
-openai.api_key = secret_service.openApi_key
+openai.api_key = secret.openApi_key
 
 def request_text(system_specs, assistant_specs, user_messages):
   messages = []

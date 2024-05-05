@@ -2,9 +2,9 @@
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from ..utils.log import log
-from . import secret as secret_service
+from ..utils import secret
 
-client = WebClient(token = secret_service.slack_bot_token)
+client = WebClient(token = secret.slack_bot_token)
 
 def update_message(channel_id, ts, new_message):
     # Example usage:
