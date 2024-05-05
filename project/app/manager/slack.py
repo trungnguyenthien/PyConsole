@@ -70,16 +70,16 @@ message_ts_vn = {message_ts_vn}
     log(f'gpt_reply = {gpt_reply}')
 
     if message_ts_vn == '':
-        log(1)
+        log("A")
         # New Message
         slack_service.send_new_message(channel_vn, gpt_reply)
-        log(1.1)
+        log("AA")
     else: 
-        log(2)
+        log("B")
         # Update Message
         slack_service.update_message(channel_vn, ts, gpt_reply)
-        log(2.2)
-
+        log("BB")
+    log("C")
     return HttpResponse("OK", status = 200)
 
 ### BOT FUNCTIONS ----------------------------------------------------------------
