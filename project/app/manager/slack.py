@@ -11,7 +11,7 @@ from asgiref.sync import sync_to_async
 
 async_request_text = sync_to_async(chatgpt_service.request_text, thread_sensitive=False)
 
-def slack_events(request):
+async def slack_events(request):
     # Lấy dữ liệu từ yêu cầu Slack và giải mã từ UTF-8
     body = request.body.decode("utf-8")
     headers = dict(request.headers)
@@ -30,7 +30,7 @@ def slack_events(request):
     # event_type = json_data['event']['type']
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
-        return handle_message_event(json_data)
+        return await handle_message_event(json_data)
     else:
         return HttpResponse("NOT YET HANDLE THIS EVENT", status=200)
 
