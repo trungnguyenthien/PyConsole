@@ -2,11 +2,12 @@
 from ..utils import secret as secret
 from ..utils import log as logger
 from openai import OpenAI
+from openai import AsyncOpenAI
 import aiohttp
 
 # openai.api_key = secret.openApi_key
 OpenAI.api_key = secret.openApi_key
-client = OpenAI.AsyncOpenAI()
+client = AsyncOpenAI()
 
 async def request_text(system_specs, assistant_specs, user_message):
     # logger.log(f'request_text key = {openai.api_key}')
