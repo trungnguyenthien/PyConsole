@@ -30,11 +30,11 @@ def slack_events(request):
     # event_type = json_data['event']['type']
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
-        return await handle_message_event(json_data)
+        return handle_message_event(json_data)
     else:
         return HttpResponse("NOT YET HANDLE THIS EVENT", status=200)
 
-async def handle_message_event(json_data):
+def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     if database_service.is_channel_jp(channel_id) == False:
