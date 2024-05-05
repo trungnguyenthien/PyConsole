@@ -46,10 +46,20 @@ def handle_message_event(json_data):
         message_text = json_data['event'].get('text', '')
         is_edited = False
     
-    log(f"Received message: {message_text} \nts = {ts} \nchannel_id = {channel_id} \nis_edited = {is_edited}")
+    
     
     channel_vn = database_service.get_channel_vn(channel_id)
     message_ts_vn = database_service.get_message_ts_vn(channel_id, ts)
+
+    log(
+f"""
+Received message: {message_text}
+ts = {ts}
+channel_id = {channel_id}
+is_edited = {is_edited}
+channel_vn = {channel_vn}
+message_ts_vn = {message_ts_vn}
+""")
 
     gpt_reply = chatgpt_service.request_text(
         database_service.get_system_rule(channel_id),
