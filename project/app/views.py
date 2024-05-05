@@ -5,7 +5,7 @@ from .utils import log as logger
 import json
 from .manager import slack as slackManager
 from django.views.decorators.csrf import csrf_exempt
-
+import asyncio
 # Create your views here.
 def console(request):
     logs = logger.all_logs()
@@ -22,8 +22,9 @@ def home(request):
     return HttpResponse(text)
 
 @csrf_exempt
-async def slack_hook(request):
+def slack_hook(request):
     if request.method != 'POST':
         logger.log({'error': 'Only POST method is allowed.'})
         return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
-    return await slackManager.slack_events(request)
+    asyncio.run(slackManager.slack_events(request))
+    return HttpResponse("OK", status = 200)
