@@ -20,12 +20,12 @@ async def request_text(system_specs, assistant_specs, user_message):
         response = await openai.ChatCompletion.acreate(
             model="gpt-4",  # Sử dụng mô hình GPT-4
             messages=messages,
-            temperature=0.7,  # Điều chỉnh độ đa dạng của câu trả lời (0-2)
-            max_tokens=10000,  # Giới hạn số lượng token trong câu trả lời
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
-            request_timeout=60,  # Thời gian chờ tối đa (giây)
+            # temperature=0.7,  # Điều chỉnh độ đa dạng của câu trả lời (0-2)
+            # max_tokens=10000,  # Giới hạn số lượng token trong câu trả lời
+            # top_p=1,
+            # frequency_penalty=0,
+            # presence_penalty=0,
+            # request_timeout=60,  # Thời gian chờ tối đa (giây)
             aiosession=session
         )
         logger.log(f"response-----------\n{response}")
