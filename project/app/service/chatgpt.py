@@ -14,7 +14,7 @@ def request_text(system_specs, assistant_specs, user_message):
             messages.append({"role": "assistant", "content": content})
         messages.append({"role": "user", "content": user_message})
         logger.log('2')
-        response = openai.chat.completions.create(
+        completion = openai.chat.completions.create(
             model="gpt-4",
             messages=messages,
             temperature=0.7,
@@ -24,8 +24,8 @@ def request_text(system_specs, assistant_specs, user_message):
             presence_penalty=0
         )
         logger.log('3')
-        logger.log(f'response = {response}')
-        reply = response.choices[0].message["content"]
+        logger.log(f'response = {completion}')
+        reply = completion.choices[0].message.content
         logger.log('4')
         return reply
     except Exception as e:
