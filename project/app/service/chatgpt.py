@@ -5,7 +5,6 @@ import openai
 
 def request_text(system_specs, assistant_specs, user_message):
     try:
-        logger.log('1')
         openai.api_key = secret.openApi_key
         messages = []
         for content in system_specs:
@@ -13,7 +12,6 @@ def request_text(system_specs, assistant_specs, user_message):
         for content in assistant_specs:
             messages.append({"role": "assistant", "content": content})
         messages.append({"role": "user", "content": user_message})
-        logger.log('2')
         completion = openai.chat.completions.create(
             model="gpt-4",
             messages=messages,
@@ -23,10 +21,7 @@ def request_text(system_specs, assistant_specs, user_message):
             frequency_penalty=0,
             presence_penalty=0
         )
-        logger.log('3')
-        # logger.log(f'response = {completion}')
         reply = completion.choices[0].message.content
-        logger.log('4')
         return reply
     except Exception as e:
         logger.log(f"Error occurred: {e}")

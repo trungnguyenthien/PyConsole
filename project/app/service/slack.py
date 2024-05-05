@@ -9,6 +9,7 @@ client = WebClient(token = secret.slack_bot_token)
 def update_message(channel_id, ts, new_message):
     # Example usage:
     # update_message('C1234567890', '1234567890.123456', 'This is the new message content')
+    log(f'update_message({channel_id}, {ts}, {new_message})')
     try:
         response = client.chat_update(
             channel=channel_id,
@@ -22,6 +23,7 @@ def update_message(channel_id, ts, new_message):
 def send_new_message(channel_id, message):
     # Example usage:
     # send_new_message('C1234567890', 'Hello, world!')
+    log(f'send_new_message({channel_id}, {message})')
     try:
         response = client.chat_postMessage(
             channel=channel_id,
