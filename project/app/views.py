@@ -26,5 +26,4 @@ def slack_hook(request):
     if request.method != 'POST':
         logger.log({'error': 'Only POST method is allowed.'})
         return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
-    asyncio.run(slackManager.slack_events(request))
-    return HttpResponse("OK", status = 200)
+    return slackManager.slack_events(request)
