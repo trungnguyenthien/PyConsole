@@ -6,6 +6,8 @@ import openai
 openai.api_key = secret.openApi_key
 
 def request_text(system_specs, assistant_specs, user_messages):
+  logger.log('request_text')
+
   messages = []
   for content in system_specs:
     messages.append({"role": "system", "content": content})
@@ -13,7 +15,7 @@ def request_text(system_specs, assistant_specs, user_messages):
     messages.append({"role": "assistant", "content": content})
   for content in user_messages:
     messages.append({"role": "user", "content": content})
-
+  logger.log(f'message = {messages}')
   response = openai.ChatCompletion.create(
     model="gpt-4",  # Sử dụng mô hình GPT-4
     messages=messages,
