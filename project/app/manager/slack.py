@@ -68,18 +68,21 @@ message_ts_vn = {message_ts_vn}
         message_text
     )
     log(f'gpt_reply = {gpt_reply}')
-    log(type(message_ts_vn))
-    if message_ts_vn == '':
-        log("A")
-        # New Message
-        slack_service.send_new_message(channel_vn, gpt_reply)
-        log("AA")
-    else: 
-        log("B")
-        # Update Message
-        slack_service.update_message(channel_vn, ts, gpt_reply)
-        log("BB")
-    log("C")
-    return HttpResponse("OK", status = 200)
+    try:
+        if message_ts_vn == '':
+            log("A")
+            # New Message
+            slack_service.send_new_message(channel_vn, gpt_reply)
+            log("AA")
+        else: 
+            log("B")
+            # Update Message
+            slack_service.update_message(channel_vn, ts, gpt_reply)
+            log("BB")
+        log("C")
+        return HttpResponse("OK", status = 200)
+    except Exception as e:
+        log(f"Error occurred: {e}")
+        return None  # Return None or handle the error as appropriate for your use case
 
 ### BOT FUNCTIONS ----------------------------------------------------------------
