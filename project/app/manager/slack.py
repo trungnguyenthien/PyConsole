@@ -7,6 +7,9 @@ from ..service import slack as slack_service
 from ..service import database as database_service
 from ..service import chatgpt as chatgpt_service
 import asyncio
+from asgiref.sync import sync_to_async
+
+async_request_text = sync_to_async(chatgpt_service.request_text, thread_sensitive=False)
 
 def slack_events(request):
     # Lấy dữ liệu từ yêu cầu Slack và giải mã từ UTF-8
@@ -59,11 +62,11 @@ channel_vn = {channel_vn}
 message_ts_vn = {message_ts_vn}
 """)
 
-    gpt_reply = await asyncio.gather(chatgpt_service.request_text(
+    gpt_reply = await async_request_text(
         database_service.get_system_rule(channel_id),
         database_service.get_assistant_rule(channel_id),
         message_text
-    ))
+    )
     log(f'gpt_reply = {gpt_reply}')
 
     if message_ts_vn == '': 
