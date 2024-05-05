@@ -69,12 +69,16 @@ message_ts_vn = {message_ts_vn}
     )
     log(f'gpt_reply = {gpt_reply}')
 
-    if message_ts_vn == '': 
+    if message_ts_vn == '':
+        log(1)
         # New Message
         slack_service.send_new_message(channel_vn, gpt_reply)
+        log(1.1)
     else: 
+        log(2)
         # Update Message
         slack_service.update_message(channel_vn, ts, gpt_reply)
+        log(2.2)
 
     return HttpResponse("OK", status = 200)
 
