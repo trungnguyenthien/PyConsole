@@ -1,11 +1,15 @@
 
+channels = [ 
+  {"jp": "C071P11UWHJ", "vn": "C071ZS2BH5G"}
+]
+
+def is_channel_jp(channel_id):
+  for channel in channels:
+    if channel['jp'] == channel_id:
+      return True
+  return False
+    
 def get_channel_vn(channel_jp):
-  channels = [ 
-    {
-      "jp": "C071P11UWHJ",
-      "vn": "C071ZS2BH5G"
-    }
-  ]
   for channel in channels:
     if channel['jp'] == channel_jp:
       return channel['vn']

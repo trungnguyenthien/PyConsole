@@ -3,6 +3,10 @@ from django.http import HttpResponse
 from ..utils.log import log
 from django.http import JsonResponse
 import json
+from ..service import slack as slack_service
+from ..service import database as database_service
+from ..service import chatgpt as chatgpt_service
+
 
 def slack_events(request):
     # Lấy dữ liệu từ yêu cầu Slack và giải mã từ UTF-8
@@ -29,8 +33,10 @@ def slack_events(request):
 
 def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
-    channel_id = json_data.get('team_id', '')
-    
+    channel_id = json_data['event'].get('channel', '')
+    if database_service.is_channel_jp(channel_id) == False:
+        return HttpResponse("SKIP", status = 200)
+
     try:
         message_text = json_data['event']['message'].get('text', '')
         ts = json_data['event']['message'].get('ts', '')
@@ -41,6 +47,23 @@ def handle_message_event(json_data):
         is_edited = False
     
     log(f"Received message: {message_text} \nts = {ts} \nchannel_id = {channel_id} \nis_edited = {is_edited}")
-    return HttpResponse("OK", status=200)
+    
+    channel_vn = database_service.get_channel_vn(channel_id)
+    message_ts_vn = database_service.get_message_ts_vn(channel_id, ts)
+
+    gpt_reply = chatgpt_service.request_text(
+        database_service.get_system_rule(channel_id),
+        database_service.get_assistant_rule(channel_id),
+        message_text
+    )
+
+    if message_ts_vn == '': 
+        # New Message
+        slack_service.send_new_message(channel_vn, gpt_reply)
+    else: 
+        # Update Message
+        slack_service.update_message(channel_vn, ts, gpt_reply)
+
+    return HttpResponse("OK", status = 200)
 
 ### BOT FUNCTIONS ----------------------------------------------------------------
