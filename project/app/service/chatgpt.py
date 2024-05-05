@@ -19,7 +19,7 @@ async def request_text(system_specs, assistant_specs, user_message):
     messages.append({"role": "user", "content": user_message})
     logger.log(f'message = {messages}')
 
-    response = await client.chat_completion(
+    response = await client.chat.completions.create(
             model="gpt-4",  # Sử dụng mô hình GPT-4
             messages=messages,
             # temperature=0.7,  # Điều chỉnh độ đa dạng của câu trả lời (0-2)
