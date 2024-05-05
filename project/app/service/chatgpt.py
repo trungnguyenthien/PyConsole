@@ -1,10 +1,14 @@
 
 from ..utils import secret as secret
 from ..utils import log as logger
-import openai
+from openai import OpenAI
 import aiohttp
 
-openai.api_key = secret.openApi_key
+# openai.api_key = secret.openApi_key
+
+client = OpenAI(
+  api_key= secret.openApi_key
+)
 
 async def request_text(system_specs, assistant_specs, user_message):
     # logger.log(f'request_text key = {openai.api_key}')
@@ -17,7 +21,7 @@ async def request_text(system_specs, assistant_specs, user_message):
     logger.log(f'message = {messages}')
 
     async with aiohttp.ClientSession() as session:
-        response = await openai.ChatCompletion.acreate(
+        response = await client.chat.completion.acreate(
             model="gpt-4",  # Sử dụng mô hình GPT-4
             messages=messages,
             # temperature=0.7,  # Điều chỉnh độ đa dạng của câu trả lời (0-2)

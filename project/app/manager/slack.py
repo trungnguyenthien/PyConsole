@@ -64,7 +64,8 @@ message_ts_vn = {message_ts_vn}
         database_service.get_assistant_rule(channel_id),
         message_text
     ))
-
+    log(f'gpt_reply = {gpt_reply}')
+    
     if message_ts_vn == '': 
         # New Message
         slack_service.send_new_message(channel_vn, gpt_reply)
