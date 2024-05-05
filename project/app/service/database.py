@@ -1,5 +1,18 @@
 
 def get_channel_vn(channel_jp):
+  channels = [ 
+    {
+      "jp": "C071P11UWHJ",
+      "vn": "C071ZS2BH5G"
+    }
+  ]
+  for channel in channels:
+    if channel['jp'] == channel_jp:
+      return channel['vn']
+  
+  return ""
+
+def update_message_ts_vn(channel_jp, message_ts_jp, message_ts_vn):
   return ""
 
 def get_message_ts_vn(channel_jp, message_ts_jp):

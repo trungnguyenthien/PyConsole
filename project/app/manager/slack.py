@@ -3,8 +3,6 @@ from django.http import HttpResponse
 from ..utils.log import log
 from django.http import JsonResponse
 import json
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
 
 def slack_events(request):
     # Lấy dữ liệu từ yêu cầu Slack và giải mã từ UTF-8
@@ -35,41 +33,14 @@ def handle_message_event(json_data):
     
     try:
         message_text = json_data['event']['message'].get('text', '')
-        ts = json_data['event']['message']['edited'].get('ts', '')
+        ts = json_data['event']['message'].get('ts', '')
         is_edited = True
     except:
         ts = json_data['event'].get('ts', '')
         message_text = json_data['event'].get('text', '')
         is_edited = False
     
-    log(f"Received message: {message_text} \n ts = {ts} \n channel_id = {channel_id} \n is_edited = {is_edited}")
+    log(f"Received message: {message_text} \nts = {ts} \nchannel_id = {channel_id} \nis_edited = {is_edited}")
     return HttpResponse("OK", status=200)
 
 ### BOT FUNCTIONS ----------------------------------------------------------------
-client = WebClient(token='xoxb-356896431271-7054590596066-8JWCx92HQecY7RiovsecRaXY')
-
-# Example usage:
-# update_message('C1234567890', '1234567890.123456', 'This is the new message content')
-def update_message(channel_id, ts, new_message):
-    try:
-        response = client.chat_update(
-            channel=channel_id,
-            ts=ts,
-            text=new_message
-        )
-        log(["Message updated successfully:", response['message']['text']])
-    except SlackApiError as e:
-        log(f"Error updating message: {e.response['error']}")
-
-
-# Example usage:
-# send_new_message('C1234567890', 'Hello, world!')
-def send_new_message(channel_id, message):
-    try:
-        response = client.chat_postMessage(
-            channel=channel_id,
-            text=message
-        )
-        log(["Message sent successfully:", response['message']['text']])
-    except SlackApiError as e:
-        log(f"Error sending message: {e.response['error']}")
