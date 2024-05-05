@@ -24,7 +24,7 @@ def request_text(system_specs, assistant_specs, user_message):
             presence_penalty=0
         )
         logger.log('3')
-        logger.log(f'response = {completion}')
+        # logger.log(f'response = {completion}')
         reply = completion.choices[0].message.content
         logger.log('4')
         return reply
