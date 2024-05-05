@@ -7,7 +7,7 @@ import aiohttp
 openai.api_key = secret.openApi_key
 
 async def request_text(system_specs, assistant_specs, user_message):
-    logger.log(f'request_text key = {openai.api_key}')
+    # logger.log(f'request_text key = {openai.api_key}')
     messages = []
     for content in system_specs:
         messages.append({"role": "system", "content": content})
