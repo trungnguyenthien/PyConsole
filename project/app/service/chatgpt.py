@@ -28,6 +28,7 @@ async def request_text(system_specs, assistant_specs, user_message):
             request_timeout=60,  # Thời gian chờ tối đa (giây)
             aiosession=session
         )
+        logger.log(f"response-----------\n{response}")
         reply = response.choices[0].message["content"]
         logger.log(f"Response from OPENAI-------------\n{reply}")
         return reply
