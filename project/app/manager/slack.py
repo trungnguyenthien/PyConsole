@@ -68,7 +68,7 @@ message_ts_vn = {message_ts_vn}
         message_text
     )
     log(f'gpt_reply = {gpt_reply}')
-
+    log(type(message_ts_vn))
     if message_ts_vn == '':
         log("A")
         # New Message
