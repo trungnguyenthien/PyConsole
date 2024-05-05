@@ -6,7 +6,7 @@ import json
 from ..service import slack as slack_service
 from ..service import database as database_service
 from ..service import chatgpt as chatgpt_service
-
+import asyncio
 
 def slack_events(request):
     # Lấy dữ liệu từ yêu cầu Slack và giải mã từ UTF-8
@@ -46,8 +46,6 @@ def handle_message_event(json_data):
         message_text = json_data['event'].get('text', '')
         is_edited = False
     
-    
-    
     channel_vn = database_service.get_channel_vn(channel_id)
     message_ts_vn = database_service.get_message_ts_vn(channel_id, ts)
 
@@ -61,11 +59,11 @@ channel_vn = {channel_vn}
 message_ts_vn = {message_ts_vn}
 """)
 
-    gpt_reply = chatgpt_service.request_text(
+    gpt_reply = asyncio.run(chatgpt_service.request_text(
         database_service.get_system_rule(channel_id),
         database_service.get_assistant_rule(channel_id),
         message_text
-    )
+    ))
 
     if message_ts_vn == '': 
         # New Message
