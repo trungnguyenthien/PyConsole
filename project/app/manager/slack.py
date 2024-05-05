@@ -31,7 +31,7 @@ def slack_events(request):
     else:
         return HttpResponse("NOT YET HANDLE THIS EVENT", status=200)
 
-def handle_message_event(json_data):
+async def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     if database_service.is_channel_jp(channel_id) == False:
@@ -59,13 +59,13 @@ channel_vn = {channel_vn}
 message_ts_vn = {message_ts_vn}
 """)
 
-    gpt_reply = asyncio.run(chatgpt_service.request_text(
+    gpt_reply = await asyncio.gather(chatgpt_service.request_text(
         database_service.get_system_rule(channel_id),
         database_service.get_assistant_rule(channel_id),
         message_text
     ))
     log(f'gpt_reply = {gpt_reply}')
-    
+
     if message_ts_vn == '': 
         # New Message
         slack_service.send_new_message(channel_vn, gpt_reply)
