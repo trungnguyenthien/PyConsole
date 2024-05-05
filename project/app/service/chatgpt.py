@@ -6,7 +6,7 @@ import openai
 openai.api_key = secret.openApi_key
 
 def request_text(system_specs, assistant_specs, user_messages):
-  logger.log('request_text')
+  logger.log(f'request_text key = {openai.api_key}')
 
   messages = []
   for content in system_specs:
