@@ -5,10 +5,8 @@ from openai import OpenAI
 import aiohttp
 
 # openai.api_key = secret.openApi_key
-
-client = OpenAI(
-  api_key= secret.openApi_key
-)
+OpenAI.api_key = secret.openApi_key
+client = OpenAI.AsyncOpenAI()
 
 async def request_text(system_specs, assistant_specs, user_message):
     # logger.log(f'request_text key = {openai.api_key}')
@@ -20,8 +18,7 @@ async def request_text(system_specs, assistant_specs, user_message):
     messages.append({"role": "user", "content": user_message})
     logger.log(f'message = {messages}')
 
-    async with aiohttp.ClientSession() as session:
-        response = await client.chat.completion.acreate(
+    response = await client.chat_completion(
             model="gpt-4",  # Sử dụng mô hình GPT-4
             messages=messages,
             # temperature=0.7,  # Điều chỉnh độ đa dạng của câu trả lời (0-2)
@@ -30,9 +27,9 @@ async def request_text(system_specs, assistant_specs, user_message):
             # frequency_penalty=0,
             # presence_penalty=0,
             # request_timeout=60,  # Thời gian chờ tối đa (giây)
-            aiosession=session
         )
-        logger.log(f"response-----------\n{response}")
-        reply = response.choices[0].message["content"]
-        logger.log(f"Response from OPENAI-------------\n{reply}")
-        return reply
+    logger.log(f"response-----------\n{response}")
+    reply = response.choices[0].message["content"]
+    logger.log(f"Response from OPENAI-------------\n{reply}")
+    return reply
+        
