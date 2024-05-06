@@ -71,7 +71,7 @@ message_ts_vn_type = {type(message_ts_vn)}
         message_text
     )
     # log(f'gpt_reply 222 = {gpt_reply}')
-    log(f'gpt_reply 333 = {gpt_reply}')
+    # log(f'gpt_reply 333 = {gpt_reply}')
     log(f'333444')
     try:
         log(f'3333333')
