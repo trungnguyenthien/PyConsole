@@ -12,5 +12,10 @@ class RequestLoggerMiddleware:
         # Ghi log cho request
         if request.path != "/slack/log/":
           log(f"Request: {request.method} {request.path}")
-        response = self.get_response(request)
+        
+        try:
+          response = self.get_response(request)
+        except Exception as e:
+          log(f"Middleware: Error: {e}")
+        
         return response
