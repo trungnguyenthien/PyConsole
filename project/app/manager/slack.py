@@ -71,7 +71,7 @@ message_ts_vn_type = {type(message_ts_vn)}
     log(f'gpt_reply = {gpt_reply}')
     try:
         log('3333333')
-        if message_ts_vn == None:
+        if message_ts_vn is None:
             log("A")
             # New Message
             slack_service.send_new_message(channel_vn, gpt_reply)
