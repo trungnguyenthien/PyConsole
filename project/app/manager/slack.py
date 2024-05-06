@@ -76,11 +76,13 @@ message_ts_vn_type = {type(message_ts_vn)}
 
         if message_ts_vn is None:
             # New Message
-            log(f'Send <message_ts_vn is None> gpt_reply = {gpt_reply}>')
+            log(f'none-message_ts_vn')
+            # log(f'Send <message_ts_vn is None> gpt_reply = {gpt_reply}>')
             # slack_service.send_new_message(channel_vn, gpt_reply)
         else:
+            log(f'message_ts_vn')
             # Update Message
-            log(f'Send <message_ts_vn is Available> gpt_reply = {gpt_reply}')
+            # log(f'Send <message_ts_vn is Available> gpt_reply = {gpt_reply}')
             # slack_service.update_message(channel_vn, ts, gpt_reply)
 
         log(f'message_ts_vn has beed sent')
