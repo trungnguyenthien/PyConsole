@@ -1,7 +1,8 @@
 
 from ..utils import secret as secret
-from ..utils import log as logger
+from ..utils.log import log
 import openai
+import json
 
 def request_text(system_specs, assistant_specs, user_message):
     try:
@@ -21,8 +22,10 @@ def request_text(system_specs, assistant_specs, user_message):
             frequency_penalty=0,
             presence_penalty=0
         )
+        log(json.dumps(completion))
         reply = completion.choices[0].message.content
+        log(json.dumps(reply))
         return reply
     except Exception as e:
-        logger.log(f"Error occurred: {e}")
+        log(f"Error occurred: {e}")
         return None  # Return None or handle the error as appropriate for your use case

@@ -71,17 +71,17 @@ message_ts_vn_type = {type(message_ts_vn)}
     )
     try:
         log(f'gpt_reply 222 = {gpt_reply}')
-        # if message_ts_vn is None:
-        #     log(f"A")
-        #     # New Message
-        #     slack_service.send_new_message(channel_vn, gpt_reply)
-        #     log(f"AA")
-        # else:
-        #     log("B")
-        #     # Update Message
-        #     slack_service.update_message(channel_vn, ts, gpt_reply)
-        #     log("BB")
-        # log("C")
+        if message_ts_vn is None:
+            log(f"A")
+            # New Message
+            slack_service.send_new_message(channel_vn, gpt_reply)
+            log(f"AA")
+        else:
+            log("B")
+            # Update Message
+            slack_service.update_message(channel_vn, ts, gpt_reply)
+            log("BB")
+        log("C")
         log(f'message_ts_vn has beed sent')
         return HttpResponse("OK", status=200)
     except Exception as e:
