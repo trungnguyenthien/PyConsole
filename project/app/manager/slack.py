@@ -11,6 +11,8 @@ from ..service import chatgpt as chatgpt_service
 
 # async_request_text = sync_to_async(chatgpt_service.request_text, thread_sensitive=False)
 
+repsponse_to_slack_received_event = JsonResponse({'status': 'ok'}, status=200)
+
 
 def slack_events(request):
     # Lấy dữ liệu từ yêu cầu Slack và giải mã từ UTF-8
@@ -31,14 +33,14 @@ def slack_events(request):
     if 'event' in json_data and json_data['event']['type'] == 'message':
         return handle_message_event(json_data)
     else:
-        return HttpResponse("NOT YET HANDLE THIS EVENT", status=200)
+        return repsponse_to_slack_received_event
 
 
 def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     if database_service.is_channel_jp(channel_id) == False:
-        return HttpResponse("SKIP", status=200)
+        return repsponse_to_slack_received_event
 
     try:
         message_text = json_data['event']['message'].get('text', '')
@@ -76,9 +78,9 @@ message_ts_vn_type = {type(message_ts_vn)}
             slack_service.update_message(channel_vn, ts, gpt_reply)
         
         log(f'Message has beed sent to vn_channel')
-        return HttpResponse("OK", status=200)
+        return repsponse_to_slack_received_event
     except Exception as e:
         log(f"manager/slack.py>> Error occurred: {e}")
-        return None  # Return None or handle the error as appropriate for your use case
+        return repsponse_to_slack_received_event
 
 # BOT FUNCTIONS ----------------------------------------------------------------
