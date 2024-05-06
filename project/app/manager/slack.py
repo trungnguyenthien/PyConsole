@@ -64,7 +64,7 @@ channel_vn = {channel_vn}
 message_ts_vn = {message_ts_vn}
 message_ts_vn_type = {type(message_ts_vn)}
 """)
-
+    log(f'aaaxxxx')
     gpt_reply = chatgpt_service.request_text(
         database_service.get_system_rule(channel_id),
         database_service.get_assistant_rule(channel_id),
@@ -72,7 +72,7 @@ message_ts_vn_type = {type(message_ts_vn)}
     )
     # log(f'gpt_reply 222 = {gpt_reply}')
     log(f'gpt_reply 333 = {gpt_reply}')
-    # log(f'333444')
+    log(f'333444')
     try:
         log(f'3333333')
         if message_ts_vn is None:
