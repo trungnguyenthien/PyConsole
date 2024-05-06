@@ -30,9 +30,9 @@ def all_logs():
     return reversed_queue
 
 def log(data, request_time = datetime.now()):
-    while len(_log_queue) >= _limit_log:
-        # Xóa phần tử đầu tiên nếu số lượng phần tử vượt quá giới hạn
-        _log_queue.pop(0)
+    # while len(_log_queue) >= _limit_log:
+    #     # Xóa phần tử đầu tiên nếu số lượng phần tử vượt quá giới hạn
+    #     _log_queue.pop(0)
     # Thêm dữ liệu mới vào cuối của _log_queue
     _log_queue.append(LogItem(datetime.now(), request_time, data))
     print(data)
