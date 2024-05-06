@@ -22,7 +22,7 @@ def request_text(system_specs, assistant_specs, user_message):
             frequency_penalty=0,
             presence_penalty=0
         )
-        log(json.dumps(completion))
+        # log(json.dumps(completion))
         reply = completion.choices[0].message.content
         log(json.dumps(reply))
         return reply
