@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from ..utils.log import log
 from django.http import JsonResponse
 import json
+import threading
 from ..service import slack as slack_service
 from ..service import database as database_service
 from ..service import chatgpt as chatgpt_service
@@ -31,16 +32,19 @@ def slack_events(request):
     
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
-        return handle_message_event(json_data)
-    else:
-        return repsponse_to_slack_received_event
+        # handle_message_event(json_data)
+        message_thread = threading.Thread(target=handle_message_event, args=(json_data,))
+        message_thread.start()
+        message_thread.join()
+    
+    return repsponse_to_slack_received_event
 
 
 def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     if database_service.is_channel_jp(channel_id) == False:
-        return repsponse_to_slack_received_event
+        return
 
     try:
         message_text = json_data['event']['message'].get('text', '')
@@ -78,9 +82,7 @@ message_ts_vn_type = {type(message_ts_vn)}
             slack_service.update_message(channel_vn, ts, gpt_reply)
         
         log(f'Message has beed sent to vn_channel')
-        return repsponse_to_slack_received_event
     except Exception as e:
         log(f"manager/slack.py>> Error occurred: {e}")
-        return repsponse_to_slack_received_event
 
 # BOT FUNCTIONS ----------------------------------------------------------------
