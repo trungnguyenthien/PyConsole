@@ -3,6 +3,7 @@ from ..utils import secret as secret
 from ..utils.log import log
 import openai
 import json
+import codecs
 
 def request_text(system_specs, assistant_specs, user_message):
     """
@@ -49,7 +50,9 @@ def request_text(system_specs, assistant_specs, user_message):
             presence_penalty=0
         )
         # log(json.dumps(completion))
-        reply = completion.choices[0].message.content.decode('unicode_escape')
+        reply = completion.choices[0].message.content
+        reply = codecs.decode(reply, 'unicode_escape')
+        
         log(json.dumps(reply))
         return reply
     except Exception as e:
