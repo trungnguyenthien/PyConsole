@@ -69,14 +69,15 @@ message_ts_vn_type = {type(message_ts_vn)}
         message_text
     )
     log(f'gpt_reply 222 = {gpt_reply}')
-    log('333444')
+    log(f'gpt_reply 333 = {gpt_reply}')
+    log(f'333444')
     try:
-        log('3333333')
+        log(f'3333333')
         if message_ts_vn is None:
-            log("A")
+            log(f"A")
             # New Message
             slack_service.send_new_message(channel_vn, gpt_reply)
-            log("AA")
+            log(f"AA")
         else: 
             log("B")
             # Update Message
