@@ -20,7 +20,7 @@ def update_message_ts_vn(channel_jp, message_ts_jp, message_ts_vn):
   return ""
 
 def get_message_ts_vn(channel_jp, message_ts_jp):
-  return ""
+  return None
 
 def get_system_rule(channel_jp):
   return [

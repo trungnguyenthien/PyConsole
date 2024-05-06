@@ -60,6 +60,7 @@ channel_id = {channel_id}
 is_edited = {is_edited}
 channel_vn = {channel_vn}
 message_ts_vn = {message_ts_vn}
+message_ts_vn_type = {type(message_ts_vn)}
 """)
 
     gpt_reply = chatgpt_service.request_text(
@@ -69,7 +70,7 @@ message_ts_vn = {message_ts_vn}
     )
     log(f'gpt_reply = {gpt_reply}')
     try:
-        if message_ts_vn == '':
+        if message_ts_vn == None:
             log("A")
             # New Message
             slack_service.send_new_message(channel_vn, gpt_reply)
