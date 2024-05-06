@@ -51,8 +51,8 @@ def request_text(system_specs, assistant_specs, user_message):
         )
         # log(json.dumps(completion))
         reply = completion.choices[0].message.content
-        reply = codecs.decode(reply, 'unicode_escape')
-        
+        reply = bytes(reply, 'latin-1').decode('utf-8')
+
         log(json.dumps(reply))
         return reply
     except Exception as e:
