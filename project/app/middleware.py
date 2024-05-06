@@ -17,6 +17,6 @@ class RequestLoggerMiddleware(MiddlewareMixin):
         try:
           response = self.get_response(request)
         except Exception as e:
-          log(f"Middleware: Error: {e}")
+          log(f"middleware.py>> Middleware: Error: {e}")
         
         return response

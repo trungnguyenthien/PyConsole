@@ -49,14 +49,9 @@ def request_text(system_specs, assistant_specs, user_message):
             frequency_penalty=0,
             presence_penalty=0
         )
-        # log(json.dumps(completion))
         reply = completion.choices[0].message.content
-        # byte_sequence = reply.encode('latin-1')
-        # reply = byte_sequence.decode('utf-8')
-
-        log(reply)
         return reply
     except Exception as e:
-        log(f"Error occurred: {e}")
+        log(f"service/chatgpt.py>> Error occurred: {e}")
         return None  # Return None or handle the error as appropriate for your use case
     

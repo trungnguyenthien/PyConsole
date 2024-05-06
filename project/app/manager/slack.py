@@ -17,9 +17,8 @@ def slack_events(request):
     body = request.body.decode("utf-8")
     headers = dict(request.headers)
 
-    # Log headers và body với format dễ đọc
-    log(json.dumps(headers, indent=2))  # JSON format cho headers
-    log(json.dumps(json.loads(body), indent=2))  # JSON format cho body
+    log("EVENT HEADER\n" + json.dumps(headers, indent=2))  # JSON format cho headers
+    log("EVENT POSTBODY\n" + json.dumps(json.loads(body), indent=2))  # JSON format cho body
 
     json_data = json.loads(body)
 
@@ -27,8 +26,7 @@ def slack_events(request):
     if 'type' in json_data and json_data['type'] == 'url_verification':
         # Trả lại challenge code mà Slack gửi
         return JsonResponse({'challenge': json_data['challenge']})
-
-    # event_type = json_data['event']['type']
+    
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
         return handle_message_event(json_data)
@@ -54,8 +52,7 @@ def handle_message_event(json_data):
     channel_vn = database_service.get_channel_vn(channel_id)
     message_ts_vn = database_service.get_message_ts_vn(channel_id, ts)
 
-    log(
-        f"""
+    log(f"""
 Received message: {message_text}
 ts = {ts}
 channel_id = {channel_id}
@@ -70,22 +67,18 @@ message_ts_vn_type = {type(message_ts_vn)}
         message_text
     )
     try:
-        log(f'gpt_reply 222 = {gpt_reply}')
+        log(f'gpt_reply = {gpt_reply}')
         if message_ts_vn is None:
-            log(f"A")
             # New Message
             slack_service.send_new_message(channel_vn, gpt_reply)
-            log(f"AA")
         else:
-            log("B")
             # Update Message
             slack_service.update_message(channel_vn, ts, gpt_reply)
-            log("BB")
-        log("C")
-        log(f'message_ts_vn has beed sent')
+        
+        log(f'Message has beed sent to vn_channel')
         return HttpResponse("OK", status=200)
     except Exception as e:
-        log(f"Error occurred: {e}")
+        log(f"manager/slack.py>> Error occurred: {e}")
         return None  # Return None or handle the error as appropriate for your use case
 
 # BOT FUNCTIONS ----------------------------------------------------------------
