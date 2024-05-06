@@ -70,6 +70,7 @@ message_ts_vn_type = {type(message_ts_vn)}
     )
     log(f'gpt_reply = {gpt_reply}')
     try:
+        log('3333333')
         if message_ts_vn == None:
             log("A")
             # New Message
