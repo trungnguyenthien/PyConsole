@@ -5,6 +5,32 @@ import openai
 import json
 
 def request_text(system_specs, assistant_specs, user_message):
+    """
+    SAMPLE RESPONSE:
+    --------------------------------
+    {
+    "choices": [
+        {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+            "content": "The 2020 World Series was played in Texas at Globe Life Field in Arlington.",
+            "role": "assistant"
+        },
+        "logprobs": null
+        }
+    ],
+    "created": 1677664795,
+    "id": "chatcmpl-7QyqpwdfhqwajicIEznoc6Q47XAyW",
+    "model": "gpt-3.5-turbo-0613",
+    "object": "chat.completion",
+    "usage": {
+        "completion_tokens": 17,
+        "prompt_tokens": 57,
+        "total_tokens": 74
+    }
+    }
+    """
     try:
         openai.api_key = secret.openApi_key
         messages = []
@@ -23,9 +49,10 @@ def request_text(system_specs, assistant_specs, user_message):
             presence_penalty=0
         )
         # log(json.dumps(completion))
-        reply = completion.choices[0].message.content
+        reply = completion.choices[0].message.content.decode('unicode_escape')
         log(json.dumps(reply))
         return reply
     except Exception as e:
         log(f"Error occurred: {e}")
         return None  # Return None or handle the error as appropriate for your use case
+    
