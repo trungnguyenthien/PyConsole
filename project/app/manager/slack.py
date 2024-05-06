@@ -64,27 +64,28 @@ channel_vn = {channel_vn}
 message_ts_vn = {message_ts_vn}
 message_ts_vn_type = {type(message_ts_vn)}
 """)
-    log(f'aaaxxxx')
+
+    log(f'=====> Replying... <=====')
     gpt_reply = chatgpt_service.request_text(
         database_service.get_system_rule(channel_id),
         database_service.get_assistant_rule(channel_id),
         message_text
     )
-    log(f'333444')
     try:
-        log(f'gpt_reply 222 = {gpt_reply}')
-        log(f'3333333')
+        log(f'GPT reply 222 = {gpt_reply}')
+
         if message_ts_vn is None:
-            log(f"A")
             # New Message
-            slack_service.send_new_message(channel_vn, gpt_reply)
-            log(f"AA")
+            log(f'=====> Send <message_ts_vn is None> gpt_reply = {
+                gpt_reply}> <=====')
+            # slack_service.send_new_message(channel_vn, gpt_reply)
         else:
-            log("B")
             # Update Message
-            slack_service.update_message(channel_vn, ts, gpt_reply)
-            log("BB")
-        log("C")
+            log(f'=====> Send <message_ts_vn is Available> gpt_reply = {
+                gpt_reply} <=====')
+            # slack_service.update_message(channel_vn, ts, gpt_reply)
+
+        log(f'=====> message_ts_vn has beed sent <=====')
         return HttpResponse("OK", status=200)
     except Exception as e:
         log(f"Error occurred: {e}")
