@@ -19,25 +19,22 @@ def slack_events(request):
     # Lấy dữ liệu từ yêu cầu Slack và giải mã từ UTF-8
     body = request.body.decode("utf-8")
     headers = dict(request.headers)
-
-    log("EVENT HEADER\n" + json.dumps(headers, indent=2))  # JSON format cho headers
-    log("EVENT POSTBODY\n" + json.dumps(json.loads(body), indent=2))  # JSON format cho body
-
+    log("EVENT HEADER\n" + json.dumps(headers, indent=2))
+    log("EVENT POSTBODY\n" + json.dumps(json.loads(body), indent=2))
     json_data = json.loads(body)
 
     # Kiểm tra loại sự kiện
     if 'type' in json_data and json_data['type'] == 'url_verification':
         # Trả lại challenge code mà Slack gửi
-        return JsonResponse({'challenge': json_data['challenge']})
-    
+        response = JsonResponse({'challenge': json_data['challenge']})
+    else:
+        response = repsponse_to_slack_received_event
+
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
-        # handle_message_event(json_data)
-        message_thread = threading.Thread(target=handle_message_event, args=(json_data,))
-        message_thread.start()
-        message_thread.join()
-    
-    return repsponse_to_slack_received_event
+        handle_message_event(json_data)
+
+    return response
 
 
 def handle_message_event(json_data):
