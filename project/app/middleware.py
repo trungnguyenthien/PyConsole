@@ -1,7 +1,8 @@
 from .utils.log import log
 import json
+from django.utils.deprecation import MiddlewareMixin
 
-class RequestLoggerMiddleware:
+class RequestLoggerMiddleware(MiddlewareMixin):
     def __init__(self, get_response):
         self.get_response = get_response
       
