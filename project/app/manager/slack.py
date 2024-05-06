@@ -68,7 +68,8 @@ message_ts_vn_type = {type(message_ts_vn)}
         database_service.get_assistant_rule(channel_id),
         message_text
     )
-    log(f'gpt_reply = {gpt_reply}')
+    log(f'gpt_reply 222 = {gpt_reply}')
+    log('333444')
     try:
         log('3333333')
         if message_ts_vn is None:
