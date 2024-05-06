@@ -51,7 +51,8 @@ def request_text(system_specs, assistant_specs, user_message):
         )
         # log(json.dumps(completion))
         reply = completion.choices[0].message.content
-        reply = bytes(reply, 'latin-1').decode('utf-8')
+        byte_sequence = reply.encode('latin-1')
+        reply = byte_sequence.decode('utf-8')
 
         log(json.dumps(reply))
         return reply
