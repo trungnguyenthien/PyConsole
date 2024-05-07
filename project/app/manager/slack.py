@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from ..utils.log import log
 from django.http import JsonResponse
 import json
-import threading
+import asyncio
 from ..service import slack as slack_service
 from ..service import database as database_service
 from ..service import chatgpt as chatgpt_service
@@ -32,12 +32,12 @@ def slack_events(request):
 
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
-        handle_message_event(json_data)
+        asyncio.create_task(handle_message_event_async(json_data))
 
     return response
 
 
-def handle_message_event(json_data):
+async def handle_message_event_async(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     if database_service.is_channel_jp(channel_id) == False:
