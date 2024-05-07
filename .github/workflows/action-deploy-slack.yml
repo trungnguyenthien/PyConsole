@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - slack
+      - slack_init_db
 
 name: 🚀 Deploy App to FTP
 jobs:
