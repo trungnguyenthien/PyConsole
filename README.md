@@ -46,3 +46,9 @@ Open terminal then
 ```
 source /home/tsrqcmjv/virtualenv/py/slack/project/3.8/bin/activate && cd /home/tsrqcmjv/py/slack/project && pip install -r requirements.txt
 ```
+
+Kill Server
+
+```
+pkill -f runserver
+```
