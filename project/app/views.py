@@ -29,8 +29,8 @@ def slack_hook(request):
         return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
     return slackManager.slack_events(request)
 
-def resetdb(request):
+def initdb(request):
     LogRecord.objects.all().delete()
     ChannelTsRecord.objects.all().delete()
     TaskRecord.objects.all().delete()
-    ChannelTsRecord()
+    ChannelTsRecord(cid_jp = 'C071P11UWHJ', cid_vn='C071ZS2BH5G').save()
