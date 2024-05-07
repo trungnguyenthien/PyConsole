@@ -37,6 +37,8 @@ python manage.py runserver --noreload
 # Update requirements.txt
 pip freeze > requirements.txt
 
+pip install -r requirements.txt
+
 # Create Migration code
 python manage.py makemigrations
 
