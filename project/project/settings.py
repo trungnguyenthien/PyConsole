@@ -33,7 +33,18 @@ STATIC_ROOT = '/home/tsrqcmjv/public_html/pyslack'
 
 
 # Application definition
-
+"""
+- 1 project có thể có nhiều app, còn 1 app có thể thuộc nhiều project. 
+- Khi mình thêm 1 app mới thì cần cập nhật danh sách này. 
+- Đơn giản là nó chứa tất cả các app có thể dử dụng thằng instance của Django
+django.contrib.admin – Site admin
+django.contrib.auth – An authentication system. Hệ thống authentication
+django.contrib.contenttypes – Hệ thống content types
+django.contrib.sessions – Hệ thống session
+django.contrib.messages – Hệ thống message
+django.contrib.staticfiles – Hệ thống quản lý các file static
+app.apps.AppConfig -
+"""
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
