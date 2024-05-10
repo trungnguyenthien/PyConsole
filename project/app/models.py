@@ -1,4 +1,8 @@
 from django.db import models
+import pytz
+
+def getTime(time):
+    return time.strftime("%H:%M:%S")
 
 class SystemMessageRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -16,12 +20,15 @@ class ChannelTsRecord(models.Model):
 
 class LogRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    content = models.TextField
+    content = models.TextField()
     type = models.IntegerField(default=0) # 0=info, 1=warning, 2=error
+
+    def to_dict(self):
+        return {'timestamp': getTime(self.created_at), 'data': self.content }
 
 class TaskRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     type = models.CharField(max_length=12)
-    data = models.TextField
+    data = models.TextField()
     priority = models.IntegerField(default=0) # 0 is highest priority
     open_status = models.BooleanField(default=1) # 0:close, 1:open

@@ -1,9 +1,5 @@
 from ..models import SystemMessageRecord, ChannelTsRecord, LogRecord, TaskRecord
 
-channels = [ 
-  {"jp": "C071P11UWHJ", "vn": "C071ZS2BH5G"}
-]
-
 def is_channel_jp(channel_id):
   record = SystemMessageRecord.objects.filter(cid_jp = channel_id)
   return record.exists()
