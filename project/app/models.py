@@ -1,5 +1,6 @@
 from django.db import models
 import pytz
+from django.utils.timezone import now
 
 def getTime(time):
     return time.strftime("%H:%M:%S")
@@ -19,12 +20,12 @@ class ChannelTsRecord(models.Model):
     ts_vn = models.CharField(max_length=20, default='') # Ex: 1715040181.995619
 
 class LogRecord(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    content = models.TextField()
+    created_at = models.DateTimeField(default=now)
+    data = models.TextField(default='')
     type = models.IntegerField(default=0) # 0=info, 1=warning, 2=error
 
     def to_dict(self):
-        return {'timestamp': getTime(self.created_at), 'data': self.content }
+        return {'timestamp': getTime(self.created_at), 'data': self.data }
 
 class TaskRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

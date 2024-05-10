@@ -14,7 +14,7 @@ _limit_log = 100
 def log(data, created_at = datetime.now()):
     # TODO: insert thêm logRecord vào, nếu số log nhiều hơn _limit_log thì xoá bớt log đã lưu lâu nhất (dựa vào created_at)
     # Thêm một bản ghi log mới
-    LogRecord.objects.create(content=data, type=type, created_at=created_at)
+    LogRecord.objects.create(data=data, type=type, created_at=created_at)
 
     # Kiểm tra số lượng logs hiện tại
     current_log_count = LogRecord.objects.count()
