@@ -22,10 +22,10 @@ class ChannelTsRecord(models.Model):
 class LogRecord(models.Model):
     created_at = models.DateTimeField(default=now)
     data = models.TextField(default='')
-    type = models.IntegerField(default=0) # 0=info, 1=warning, 2=error
+    # type = models.IntegerField(default=0) # 0=info, 1=warning, 2=error
 
     def to_dict(self):
-        return {'timestamp': getTime(self.created_at), 'data': self.data }
+        return {'timestamp': self.created_at.strftime('%Y-%m-%d %H:%M:%S'), 'data': self.data }
 
 class TaskRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
