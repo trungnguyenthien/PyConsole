@@ -5,7 +5,7 @@ from .utils import log as logger
 import json
 from .manager import slack as slackManager
 from django.views.decorators.csrf import csrf_exempt
-from .models import LogRecord, ChannelTsRecord, TaskRecord
+from .models import LogRecord, ChannelTsRecord, TaskRecord, SystemMessageRecord
 
 # Create your views here.
 def console(request):
@@ -33,4 +33,11 @@ def initdb(request):
     LogRecord.objects.all().delete()
     ChannelTsRecord.objects.all().delete()
     TaskRecord.objects.all().delete()
-    ChannelTsRecord(cid_jp = 'C071P11UWHJ', cid_vn='C071ZS2BH5G').save()
+    SystemMessageRecord.objects.all().delete()
+    SystemMessageRecord(cid_jp = 'C071P11UWHJ', cid_vn='C071ZS2BH5G', message = 
+"""
+Bạn là một trợ lý đắc lực trong channel Slack. 
+Công việc của bạn khi user gửi một nội dung bằng tiếng Anh là:
+- Dịch từ tiếng Anh sang tiếng Việt với phong cách lịch sự trang trọng.
+- Bạn cần tóm tắt nội dung từ tiếng Anh nếu nội dung dịch có nhiều thông tin cần lưu ý.
+""").save()

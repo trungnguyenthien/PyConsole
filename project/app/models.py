@@ -1,5 +1,12 @@
 from django.db import models
 
+class SystemMessageRecord(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    cid_jp = models.CharField(max_length=12, default='') # Ex: C071P11UWHJ
+    cid_vn = models.CharField(max_length=12, default='') # Ex: C071P11UWHJ
+    message = models.TextField(default = '')
+
 class ChannelTsRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     cid_jp = models.CharField(max_length=12, default='') # Ex: C071P11UWHJ
