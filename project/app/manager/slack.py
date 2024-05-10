@@ -66,7 +66,7 @@ message_ts_vn_type = {type(message_ts_vn)}
 """)
     gpt_reply = chatgpt_service.request_text(
         database_service.get_system_rule(channel_id),
-        database_service.get_assistant_rule(channel_id),
+        # database_service.get_assistant_rule(channel_id),
         message_text
     )
     try:

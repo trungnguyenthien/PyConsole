@@ -1,35 +1,40 @@
+from ..models import SystemMessageRecord, ChannelTsRecord, LogRecord, TaskRecord
 
 channels = [ 
   {"jp": "C071P11UWHJ", "vn": "C071ZS2BH5G"}
 ]
 
 def is_channel_jp(channel_id):
-  for channel in channels:
-    if channel['jp'] == channel_id:
-      return True
-  return False
+  record = SystemMessageRecord.objects.filter(cid_jp = channel_id)
+  return record.exists()
     
 def get_channel_vn(channel_jp):
-  for channel in channels:
-    if channel['jp'] == channel_jp:
-      return channel['vn']
-  
-  return ""
+  record = SystemMessageRecord.objects.filter(cid_jp = channel_jp)
+  if record.exists() == True:
+    return record.cid_vn
+  else:
+    return ''
 
 def update_message_ts_vn(channel_jp, message_ts_jp, message_ts_vn):
-  return ""
+  record = ChannelTsRecord.objects.filter(cid_jp = channel_jp, ts_jp = message_ts_jp)
+  if record.exists() == True:
+    record.ts_vn = message_ts_vn
+    record.save()
+  else:
+    pass
 
 def get_message_ts_vn(channel_jp, message_ts_jp):
-  return None
+  record = ChannelTsRecord.objects.filter(cid_jp = channel_jp, ts_jp = message_ts_jp)
+  if record.exists() == True:
+    return record.ts_vn
+  else:
+    return None
 
 def get_system_rule(channel_jp):
-  return [
-"""Bạn là một trợ lý đắc lực trong channel Slack. 
-Công việc của bạn là truyền đạt đầy đủ nội dung từ Tiếng Anh sang Tiếng Việt."""
-]
+  return SystemMessageRecord.objects.get(cid_jp = channel_jp).message
 
 
-def get_assistant_rule(channel_jp):
-  return [
-    "Trong quá trình dịch hãy giữ nguyên định dạng MarkDown của message"
-  ]
+# def get_assistant_rule(channel_jp):
+#   return [
+#     "Trong quá trình dịch hãy giữ nguyên định dạng MarkDown của message"
+#   ]

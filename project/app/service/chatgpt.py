@@ -5,7 +5,7 @@ import openai
 import json
 import codecs
 
-def request_text(system_specs, assistant_specs, user_message):
+def request_text(system_specs, user_message):
     """
     SAMPLE RESPONSE:
     --------------------------------
@@ -37,8 +37,8 @@ def request_text(system_specs, assistant_specs, user_message):
         messages = []
         for content in system_specs:
             messages.append({"role": "system", "content": content})
-        for content in assistant_specs:
-            messages.append({"role": "assistant", "content": content})
+        # for content in assistant_specs:
+        #     messages.append({"role": "assistant", "content": content})
         messages.append({"role": "user", "content": user_message})
         completion = openai.chat.completions.create(
             model="gpt-4",
