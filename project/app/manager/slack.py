@@ -72,15 +72,15 @@ message_ts_vn_type = {type(message_ts_vn)}
     )
     try:
         log(f'gpt_reply = {gpt_reply}')
-        adapt_handle_message_event_for_sub_messages(
-            json_data, channel_vn, gpt_reply)
+        # adapt_handle_message_event_for_sub_messages(
+        #     json_data, channel_vn, gpt_reply)
         # log(f"ts_dict_jp_vn: {ts_dict_jp_vn}")
-        # if message_ts_vn is None:
-        #     # New Message
-        #     slack_service.send_new_message(channel_vn, gpt_reply)
-        # else:
-        #     # Update Message
-        #     slack_service.update_message(channel_vn, ts, gpt_reply)
+        if message_ts_vn is None:
+            # New Message
+            slack_service.send_new_message(channel_vn, gpt_reply)
+        else:
+            # Update Message
+            slack_service.update_message(channel_vn, ts, gpt_reply)
 
         log(f'Message has beed sent to vn_channel')
     except Exception as e:
