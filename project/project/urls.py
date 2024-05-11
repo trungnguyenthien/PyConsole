@@ -16,12 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from project.app import external_action
 from app import views as app_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # TRONG MÔI TRƯỜNG PRODUCTION NÊN CHẶN ROUTING ĐẾN console.html
-    path('log/', app_views.console, name='log'),
+    path('log/', app_views.console_log, name='log'),
     path('', app_views.home, name='home'),
-    path('events/', app_views.slack_hook, name='events'),
+    path('events/', external_action.slack_hook, name='events'),
 ]

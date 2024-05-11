@@ -6,4 +6,6 @@
 - manage.py là file để tạo app, migrate,...
 
 # Tham khảo
-1. Python cơ bản với Django Framework. (src)[https://viblo.asia/p/python-co-ban-voi-django-framework-Ljy5VxGkZra]
+1. Python cơ bản với Django Framework ([src](https://viblo.asia/p/python-co-ban-voi-django-framework-Ljy5VxGkZra))
+2. Django Project Structure: A Comprehensive Guide ([src](https://medium.com/django-unleashed/django-project-structure-a-comprehensive-guide-4b2ddbf2b6b8))
+3. 
