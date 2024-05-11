@@ -8,7 +8,7 @@ class RequestLoggerMiddleware:
 
     def __call__(self, request):
         # Ghi log cho request
-        if request.path != "/slack/log/" or request.path != "/log/":
+        if request.path != "/slack/log/" and request.path != "/log/":
           log(f"Request: {request.method} {request.path}")
         try:
           response = self.get_response(request)
