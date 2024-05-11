@@ -1,0 +1,49 @@
+{
+  "workbench.colorTheme": "Monokai",
+  "workbench.iconTheme": "material-icon-theme",
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "redhat.telemetry.enabled": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "javascript.format.enable": false,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "go.toolsManagement.autoUpdate": true,
+  "files.associations": {
+    "*.md": "markdown"
+  },
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "editor.formatOnPaste": true,
+  "editor.tabSize": 2,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.largeFileOptimizations": false,
+  "window.zoomLevel": 1,
+  "task.slowProviderWarning": true,
+  "[python]": {
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.autopep8"
+  },
+  // https://stackoverflow.com/questions/59581746/why-does-vs-code-autopep8-format-2-white-lines#:~:text=Because%20autopep8%20follows%20PEP8%20which,definitions%20with%20two%20blank%20lines.&text=you%20can%20also%20configure%20python,formatting.
+  // https://github.com/hhatto/autopep8#features
+  "autopep8.args": ["--indent-size=2", "--max-line-length=140", "--ignore=E302"]
+}
