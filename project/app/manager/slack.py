@@ -23,18 +23,18 @@ def slack_events(request):
     log("EVENT POSTBODY\n" + json.dumps(json.loads(body), indent=2))
     json_data = json.loads(body)
 
-    # Kiểm tra loại sự kiện
-    if 'type' in json_data and json_data['type'] == 'url_verification':
-        # Trả lại challenge code mà Slack gửi
-        response = JsonResponse({'challenge': json_data['challenge']})
-    else:
-        response = repsponse_to_slack_received_event
+    # # Kiểm tra loại sự kiện
+    # if 'type' in json_data and json_data['type'] == 'url_verification':
+    #     # Trả lại challenge code mà Slack gửi
+    #     response = JsonResponse({'challenge': json_data['challenge']})
+    # else:
+    #     response = repsponse_to_slack_received_event
 
-    # Kiểm tra sự kiện "message" và xử lý
-    if 'event' in json_data and json_data['event']['type'] == 'message':
-        handle_message_event(json_data)
+    # # Kiểm tra sự kiện "message" và xử lý
+    # if 'event' in json_data and json_data['event']['type'] == 'message':
+    #     handle_message_event(json_data)
 
-    return response
+    return JsonResponse({'status': 'ok'}, status=200)
 
 
 def handle_message_event(json_data):
@@ -77,7 +77,7 @@ message_ts_vn_type = {type(message_ts_vn)}
         else:
             # Update Message
             slack_service.update_message(channel_vn, ts, gpt_reply)
-        
+
         log(f'Message has beed sent to vn_channel')
     except Exception as e:
         log(f"manager/slack.py>> Error occurred: {e}")
