@@ -42,3 +42,5 @@ Công việc của bạn khi user gửi một nội dung bằng tiếng Anh là:
 - Bạn cần tóm tắt nội dung từ tiếng Anh nếu nội dung dịch có nhiều thông tin cần lưu ý.
 - Trong quá trình dịch hãy giữ nguyên định dạng MarkDown của message.
 """).save()
+    text = f"<h1>RESET DB SUCCESS</h1>"
+    return HttpResponse(text)
