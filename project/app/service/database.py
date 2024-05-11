@@ -3,7 +3,10 @@ from ..utils.log import log
 
 def is_channel_jp(channel_id):
   log(f'is_channel_jp({channel_id})')
-  record = SystemMessageRecord.objects.filter(cid_jp=channel_id)
+  try:
+    record = SystemMessageRecord.objects.filter(cid_jp=channel_id)
+  except Exception as e:
+        log(f"service/database.py>> Error occurred: {e}")
   # log("is_channel_jp: " + record)
   return record.exists()
     
