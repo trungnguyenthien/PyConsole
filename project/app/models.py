@@ -22,7 +22,7 @@ class LogRecord(models.Model):
     data = models.TextField(default='')
 
     def to_dict(self):
-        return {'timestamp': self.created_at.strftime('%Y-%m-%d %H:%M:%SSS'), 'data': self.data }
+        return {'timestamp': self.created_at.strftime('%Y-%m-%d %H:%M:%S.%f'), 'data': self.data }
 
 class TaskRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
