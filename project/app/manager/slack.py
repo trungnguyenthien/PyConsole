@@ -40,7 +40,9 @@ def slack_events(request):
 def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
+    log(f'handle_message_event = {channel_id}')
     if database_service.is_channel_jp(channel_id) == False:
+        log(f'is_channel_jp = {False}')
         return
 
     try:

@@ -2,6 +2,7 @@ from ..models import SystemMessageRecord, ChannelTsRecord, LogRecord, TaskRecord
 from ..utils.log import log
 
 def is_channel_jp(channel_id):
+  log(f'is_channel_jp({channel_id})')
   record = SystemMessageRecord.objects.filter(cid_jp = channel_id)
   log("is_channel_jp: " + record)
   return record.exists()
