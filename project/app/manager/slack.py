@@ -51,7 +51,7 @@ def handle_message_event(json_data):
         ts = json_data['event'].get('ts', '')
         message_text = json_data['event'].get('text', '')
         is_edited = False
-
+    log(f'is_channel_jp = {True}')
     channel_vn = database_service.get_channel_vn(channel_id)
     message_ts_vn = database_service.get_message_ts_vn(channel_id, ts)
 

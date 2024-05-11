@@ -13,7 +13,7 @@ def is_channel_jp(channel_id):
 def get_channel_vn(channel_jp):
   record = SystemMessageRecord.objects.filter(cid_jp = channel_jp)
   if record.exists() == True:
-    return record.cid_vn
+    return SystemMessageRecord.objects.get(cid_jp = channel_jp).cid_vn
   else:
     return ''
 
