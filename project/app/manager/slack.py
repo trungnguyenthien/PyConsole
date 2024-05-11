@@ -26,15 +26,13 @@ def slack_events(request):
     # Kiểm tra loại sự kiện
     if 'type' in json_data and json_data['type'] == 'url_verification':
         # Trả lại challenge code mà Slack gửi
-        response = JsonResponse({'challenge': json_data['challenge']})
-    else:
-        response = repsponse_to_slack_received_event
+        return JsonResponse({'challenge': json_data['challenge']})
 
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
         handle_message_event(json_data)
 
-    return response
+    return repsponse_to_slack_received_event
 
 
 def handle_message_event(json_data):
