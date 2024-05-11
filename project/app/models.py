@@ -17,9 +17,9 @@ class ChannelTsRecord(models.Model):
     ts_vn = models.CharField(max_length=20, default='') # Ex: 1715040181.995619
 
 class LogRecord(models.Model):
+    id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(default=now)
     data = models.TextField(default='')
-    # type = models.IntegerField(default=0) # 0=info, 1=warning, 2=error
 
     def to_dict(self):
         return {'timestamp': self.created_at.strftime('%Y-%m-%d %H:%M:%SSS'), 'data': self.data }

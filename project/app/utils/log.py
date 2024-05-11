@@ -8,7 +8,7 @@ from datetime import datetime
 
 def all_logs():
     # Tạo bản sao của _log_queue và đảo ngược thứ tự của các phần tử
-    return LogRecord.objects.all().order_by('-created_at')
+    return LogRecord.objects.all().order_by('-id')
 
 _limit_log = 100
 def log(data, created_at = datetime.now()):
