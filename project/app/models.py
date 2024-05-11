@@ -2,9 +2,6 @@ from django.db import models
 import pytz
 from django.utils.timezone import now
 
-def getTime(time):
-    return time.strftime("%H:%M:%S")
-
 class SystemMessageRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -25,7 +22,7 @@ class LogRecord(models.Model):
     # type = models.IntegerField(default=0) # 0=info, 1=warning, 2=error
 
     def to_dict(self):
-        return {'timestamp': self.created_at.strftime('%Y-%m-%d %H:%M:%S'), 'data': self.data }
+        return {'timestamp': self.created_at.strftime('%Y-%m-%d %H:%M:%SSS'), 'data': self.data }
 
 class TaskRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
