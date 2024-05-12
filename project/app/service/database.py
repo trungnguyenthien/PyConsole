@@ -13,7 +13,7 @@ def is_channel_jp(channel_id):
 def get_channel_vn(channel_jp):
   log(f'get_channel_vn({channel_jp})')
   try:
-    record = SystemMessageRecord.objects.first(cid_jp = channel_jp)
+    record = SystemMessageRecord.objects.filter(cid_jp=channel_jp).first()
     if record:
       return record.cid_vn
     else:
@@ -23,7 +23,7 @@ def get_channel_vn(channel_jp):
         return None
 
 def update_message_ts_vn(channel_jp, message_ts_jp, message_ts_vn):
-  record = ChannelTsRecord.objects.first(cid_jp = channel_jp, ts_jp = message_ts_jp)
+  record = ChannelTsRecord.objects.filter(cid_jp = channel_jp, ts_jp = message_ts_jp).first()
   if record:
     record.ts_vn = message_ts_vn
     record.save()
@@ -32,14 +32,14 @@ def update_message_ts_vn(channel_jp, message_ts_jp, message_ts_vn):
 
 def get_message_ts_vn(channel_jp, message_ts_jp):
   log(f'get_message_ts_vn({message_ts_jp})')
-  record = ChannelTsRecord.objects.first(cid_jp = channel_jp, ts_jp = message_ts_jp)
+  record = ChannelTsRecord.objects.filter(cid_jp = channel_jp, ts_jp = message_ts_jp).first()
   if record:
     return record.ts_vn
   else:
     return None
 
 def get_system_rule(channel_jp):
-  return SystemMessageRecord.objects.get(cid_jp = channel_jp).message
+  return SystemMessageRecord.objects.filter(cid_jp = channel_jp).first().message
 
 
 # def get_assistant_rule(channel_jp):
