@@ -12,11 +12,15 @@ def is_channel_jp(channel_id):
     
 def get_channel_vn(channel_jp):
   log(f'get_channel_vn({channel_jp})')
-  record = SystemMessageRecord.objects.first(cid_jp = channel_jp)
-  if record:
-    return record.cid_vn
-  else:
-    return None
+  try:
+    record = SystemMessageRecord.objects.first(cid_jp = channel_jp)
+    if record:
+      return record.cid_vn
+    else:
+      return None
+  except Exception as e:
+        log(f"service/database.py>> Error occurred: {e}")
+        return None
 
 def update_message_ts_vn(channel_jp, message_ts_jp, message_ts_vn):
   record = ChannelTsRecord.objects.first(cid_jp = channel_jp, ts_jp = message_ts_jp)
