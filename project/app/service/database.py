@@ -11,6 +11,7 @@ def is_channel_jp(channel_id):
   return record.exists()
     
 def get_channel_vn(channel_jp):
+  log(f'get_channel_vn({channel_jp})')
   record = SystemMessageRecord.objects.first(cid_jp = channel_jp)
   if record:
     return record.cid_vn
@@ -26,6 +27,7 @@ def update_message_ts_vn(channel_jp, message_ts_jp, message_ts_vn):
     pass
 
 def get_message_ts_vn(channel_jp, message_ts_jp):
+  log(f'get_message_ts_vn({message_ts_jp})')
   record = ChannelTsRecord.objects.first(cid_jp = channel_jp, ts_jp = message_ts_jp)
   if record:
     return record.ts_vn
