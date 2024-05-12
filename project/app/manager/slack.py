@@ -7,6 +7,7 @@ import threading
 from ..service import slack as slack_service
 from ..service import database as database_service
 from ..service import chatgpt as chatgpt_service
+import threading
 # import asyncio
 # from asgiref.sync import sync_to_async
 
@@ -30,7 +31,11 @@ def slack_events(request):
 
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
-        handle_message_event(json_data)
+        # Tạo luồng mới
+        thread = threading.Thread(target=handle_message_event, args=(json_data,))
+        # Khởi chạy luồng
+        thread.start()
+        # handle_message_event(json_data)
 
     return repsponse_to_slack_received_event
 
