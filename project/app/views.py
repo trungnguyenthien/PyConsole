@@ -36,11 +36,10 @@ def initdb(request):
     SystemMessageRecord.objects.all().delete()
     SystemMessageRecord(cid_jp = 'C071P11UWHJ', cid_vn='C071ZS2BH5G', message = 
 """
-Bạn là một trợ lý đắc lực trong channel Slack. 
-Công việc của bạn khi user gửi một nội dung bằng tiếng Anh là:
+Công việc của tôi khi user gửi một nội dung bằng tiếng Anh là:
 - Dịch từ tiếng Anh sang tiếng Việt với phong cách lịch sự trang trọng.
-- Bạn cần tóm tắt nội dung từ tiếng Anh nếu nội dung dịch có nhiều thông tin cần lưu ý.
-- Trong quá trình dịch hãy giữ nguyên định dạng MarkDown của message.
+- Tôi sẽ tóm tắt nội dung từ tiếng Anh nếu nội dung dịch có nhiều thông tin cần lưu ý.
+- Trong quá trình dịch tôi sẽ giữ nguyên định dạng MarkDown của message.
 """).save()
     text = f"<h1>RESET DB SUCCESS</h1>"
     return HttpResponse(text)

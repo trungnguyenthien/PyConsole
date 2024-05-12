@@ -11,23 +11,23 @@ def is_channel_jp(channel_id):
   return record.exists()
     
 def get_channel_vn(channel_jp):
-  record = SystemMessageRecord.objects.filter(cid_jp = channel_jp)
-  if record.exists() == True:
-    return SystemMessageRecord.objects.get(cid_jp = channel_jp).cid_vn
+  record = SystemMessageRecord.objects.first(cid_jp = channel_jp)
+  if record:
+    return record.cid_vn
   else:
-    return ''
+    return None
 
 def update_message_ts_vn(channel_jp, message_ts_jp, message_ts_vn):
-  record = ChannelTsRecord.objects.filter(cid_jp = channel_jp, ts_jp = message_ts_jp)
-  if record.exists() == True:
+  record = ChannelTsRecord.objects.first(cid_jp = channel_jp, ts_jp = message_ts_jp)
+  if record:
     record.ts_vn = message_ts_vn
     record.save()
   else:
     pass
 
 def get_message_ts_vn(channel_jp, message_ts_jp):
-  record = ChannelTsRecord.objects.filter(cid_jp = channel_jp, ts_jp = message_ts_jp)
-  if record.exists() == True:
+  record = ChannelTsRecord.objects.first(cid_jp = channel_jp, ts_jp = message_ts_jp)
+  if record:
     return record.ts_vn
   else:
     return None

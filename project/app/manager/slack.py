@@ -66,17 +66,14 @@ message_ts_vn_type = {type(message_ts_vn)}
 """)
     gpt_reply = chatgpt_service.request_text(
         database_service.get_system_rule(channel_id),
-        # database_service.get_assistant_rule(channel_id),
         message_text
     )
     try:
         log(f'gpt_reply = {gpt_reply}')
-        if message_ts_vn is None:
-            # New Message
-            slack_service.send_new_message(channel_vn, gpt_reply)
-        else:
-            # Update Message
+        if message_ts_vn:
             slack_service.update_message(channel_vn, ts, gpt_reply)
+        else:
+            slack_service.send_new_message(channel_vn, gpt_reply)
         
         log(f'Message has beed sent to vn_channel')
     except Exception as e:
