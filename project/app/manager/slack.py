@@ -74,7 +74,7 @@ message_ts_vn_type = {type(message_ts_vn)}
         log(f'gpt_reply = {gpt_reply}')
         # adapt_handle_message_event_for_sub_messages(
         #     json_data, channel_vn, gpt_reply)
-        # log(f"ts_dict_jp_vn: {ts_dict_jp_vn}")
+        log(f"ts_dict_jp_vn: {ts_dict_jp_vn}")
         if message_ts_vn is None:
             # New Message
             slack_service.send_new_message(channel_vn, gpt_reply)
