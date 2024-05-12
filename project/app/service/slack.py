@@ -18,6 +18,7 @@ def update_message(channel_id, ts, new_message):
             text=new_message
         )
         log(["Message updated successfully:", response['message']['text']])
+        return response
     except SlackApiError as e:
         log(f"Error updating message: {e.response['error']}")
 
@@ -32,6 +33,7 @@ def send_new_message(channel_id, message):
             text=message
         )
         log(["Message sent successfully:", response['message']['text']])
+        return response
     except SlackApiError as e:
         log(f"Error sending message: {e.response['error']}")
 
