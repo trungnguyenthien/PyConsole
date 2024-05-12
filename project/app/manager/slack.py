@@ -95,7 +95,10 @@ def adapt_handle_message_event_for_sub_messages(json_body, channel_vn, text):
 
     if type == 1:
         response = slack_service.send_new_message(channel_vn, text)
+        log(f"get_vn_ts = {get_vn_ts(response)}")
         ts_dict_jp_vn[message_ts] = get_vn_ts(response)
+        log(f"message_ts: {message_ts}")
+        log(f"ts_dict_jp_vn: {ts_dict_jp_vn[message_ts]}")
     if type == 2:
         thread_ts_vn = ts_dict_jp_vn.get(thread_ts)
         if thread_ts_vn is not None:
