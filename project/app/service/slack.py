@@ -3,7 +3,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from ..utils.log import log
 from ..utils import secret
-import json
+from ..utils.common import json_object
 
 client = WebClient(token = secret.slack_bot_token)
 
@@ -17,7 +17,7 @@ def update_message(channel_id, ts, new_message):
             ts=ts,
             text=new_message
         )
-        log(f'chat_update response = {vars(response)}')
+        log(f'chat_update response = {json_object(response)}')
         log(["Message updated successfully:", response['message']['text']])
     except SlackApiError as e:
         log(f"Error updating message: {e.response['error']}")
@@ -31,7 +31,7 @@ def send_new_message(channel_id, message):
             channel=channel_id,
             text=message
         )
-        log(f'send_new_message response = {vars(response)}')
+        log(f'send_new_message response = {json_object(response)}')
         log(["Message sent successfully:", response['message']['text']])
     except SlackApiError as e:
         log(f"Error sending message: {e.response['error']}")
