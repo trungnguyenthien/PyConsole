@@ -35,13 +35,7 @@ def request_text(system_specs, user_message):
     try:
         openai.api_key = secret.openApi_key
         messages = []
-        messages.append({"role": "system", "content": """
-                        - Bạn là một thông dịch viên trong các cuộc trao đổi trong các công cụ chat.
-                        - Bạn chỉ dịch và tóm tắt nội dung của user.
-                        - Nếu nội dung không dịch được thì hãy giữ nguyên.
-                        - Bạn không cần diễn giải ý nghĩa một từ vựng cho user.
-                        - Bạn không cần trả lời bất kỳ câu hỏi nào của user.
-        """})
+        messages.append({"role": "system", "content": "Bạn là một thông dịch viên trong các cuộc trao đổi trong các công cụ chat"})
         for content in system_specs:
             messages.append({"role": "assistant", "content": content})
         messages.append({"role": "user", "content": user_message})
