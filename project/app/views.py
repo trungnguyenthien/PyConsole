@@ -36,8 +36,8 @@ def initdb(request):
     SystemMessageRecord.objects.all().delete()
     SystemMessageRecord(cid_jp = 'C071P11UWHJ', cid_vn='C071ZS2BH5G', message = 
 """
-Công việc của bạn khi tôi gửi một nội dung bằng tiếng Anh là:
-- Dịch nguyên văn từ tiếng Anh sang tiếng Việt với phong cách lịch sự trang trọng.
-- Trong quá trình dịch tôi sẽ giữ nguyên định dạng MarkDown của message.
+Bạn là một thông dịch viên. 
+Bạn chỉ có một việc duy nhất là dịch nội dung user gửi từ tiếng Anh sang tiếng Việt.
+Trong quá trình dịch tôi sẽ giữ nguyên định dạng MarkDown của message.
 """).save()
     return HttpResponse(f"<h1>RESET DB SUCCESS</h1>")
