@@ -41,7 +41,8 @@ def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     event_ts = ts = json_data['event'].get('ts', '')
-    log(f'CurrentTs {event_ts}, ResolveTs = [{resolved_ts}]')
+    
+    log(f'CurrentTs {event_ts}, ResolveTs = {resolved_ts}')
     # TODO: Ở đây xử lý tạm trong cache resolved_ts, thực tế cần lưu trong database
     if event_ts in resolved_ts:
         log(f'Reject {event_ts}')
@@ -49,6 +50,7 @@ def handle_message_event(json_data):
     else:
         log(f'Tracking {event_ts}')
         resolved_ts.append(event_ts)
+        log(f'ResolveTs = {resolved_ts}')
 
     log(f'handle_message_event = {channel_id}')
     if database_service.is_channel_jp(channel_id) == False:
