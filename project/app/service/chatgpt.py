@@ -34,11 +34,14 @@ def request_text(system_specs, user_message):
     """
     try:
         openai.api_key = secret.openApi_key
+        formatted_user_specs = '\n'.join(system_specs)
         messages = []
-        # messages.append({"role": "system", "content": "Bạn là một thông dịch viên trong các cuộc trao đổi trong các công cụ chat"})
-        for content in system_specs:
-            messages.append({"role": "system", "content": content})
-        messages.append({"role": "user", "content": user_message})
+        messages.append({"role": "system", "content": "You are useful assistant"})
+        messages.append({"role": "user", "content": f"""
+{formatted_user_specs}
+---
+{user_message}
+"""})
         completion = openai.chat.completions.create(
             model="gpt-4",
             messages=messages,
