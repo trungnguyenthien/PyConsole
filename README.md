@@ -63,6 +63,7 @@ pkill -f runserver
 ```
 
 ```
-pip install aiohttp mysqlclient psycopg2-binary openai slack_sdk APScheduler
+pip install mysqlclient psycopg2-binary openai slack_sdk APScheduler
 
 ```
+pip uninstall mysqlclient psycopg2-binary
