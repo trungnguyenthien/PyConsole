@@ -31,16 +31,12 @@ def slack_events(request):
 
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
-        asyncio.create_task(handle_message_event(json_data))
-        # Tạo luồng mới
-        # thread = threading.Thread(target=handle_message_event, args=(json_data,))
-        # Khởi chạy luồng
-        # thread.start()
+        handle_message_event(json_data)
 
     return repsponse_to_slack_received_event
 
 
-async def handle_message_event(json_data):
+def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     log(f'handle_message_event = {channel_id}')
