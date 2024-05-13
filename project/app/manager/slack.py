@@ -31,7 +31,7 @@ def slack_events(request):
 
     # Kiểm tra sự kiện "message" và xử lý
     if 'event' in json_data and json_data['event']['type'] == 'message':
-        handle_message_event(json_data)
+        return handle_message_event(json_data)
 
     return repsponse_to_slack_received_event
 
@@ -42,7 +42,7 @@ def handle_message_event(json_data):
     log(f'handle_message_event = {channel_id}')
     if database_service.is_channel_jp(channel_id) == False:
         log(f'is_channel_jp = {False}')
-        return
+        return repsponse_to_slack_received_event
 
     try:
         message_text = json_data['event']['message'].get('text', '')
@@ -81,4 +81,5 @@ message_ts_vn_type = {type(message_ts_vn)}
     except Exception as e:
         log(f"manager/slack.py>> Error occurred: {e}")
 
+    return repsponse_to_slack_received_event
 # BOT FUNCTIONS ----------------------------------------------------------------
