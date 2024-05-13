@@ -35,10 +35,19 @@ def slack_events(request):
 
     return repsponse_to_slack_received_event
 
+resolved_ts = []
 
 def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
+    event_ts = ts = json_data['event'].get('ts', '')
+
+    # TODO: Ở đây xử lý tạm trong cache resolved_ts, thực tế cần lưu trong database
+    if event_ts in resolved_ts:
+        return repsponse_to_slack_received_event
+    else:
+        resolved_ts.append(event_ts)
+
     log(f'handle_message_event = {channel_id}')
     if database_service.is_channel_jp(channel_id) == False:
         log(f'is_channel_jp = {False}')
