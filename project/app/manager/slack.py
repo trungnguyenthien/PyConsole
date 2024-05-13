@@ -44,8 +44,10 @@ def handle_message_event(json_data):
 
     # TODO: Ở đây xử lý tạm trong cache resolved_ts, thực tế cần lưu trong database
     if event_ts in resolved_ts:
+        log(f'Reject {event_ts}')
         return repsponse_to_slack_received_event
     else:
+        log(f'Tracking {event_ts}')
         resolved_ts.append(event_ts)
 
     log(f'handle_message_event = {channel_id}')
