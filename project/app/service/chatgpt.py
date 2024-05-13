@@ -37,7 +37,7 @@ def request_text(system_specs, user_message):
         messages = []
         messages.append({"role": "system", "content": "Bạn là một thông dịch viên trong các cuộc trao đổi trong các công cụ chat"})
         for content in system_specs:
-            messages.append({"role": "assistant", "content": content})
+            messages.append({"role": "user", "content": content})
         messages.append({"role": "user", "content": user_message})
         completion = openai.chat.completions.create(
             model="gpt-4",
