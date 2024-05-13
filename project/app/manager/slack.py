@@ -41,7 +41,7 @@ def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     event_ts = ts = json_data['event'].get('ts', '')
-
+    log(f'CurrentTs {event_ts}, ResolveTs = [{resolved_ts}]')
     # TODO: Ở đây xử lý tạm trong cache resolved_ts, thực tế cần lưu trong database
     if event_ts in resolved_ts:
         log(f'Reject {event_ts}')
