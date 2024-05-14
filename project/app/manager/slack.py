@@ -86,7 +86,7 @@ message_ts_vn_type = {type(vn_ts)}
 *🤖 CÁC Ý CHÍNH 🤖*
 {summary}
         """
-    
+        gpt_reply = f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n{gpt_reply}'
     try:
         log(f'gpt_reply = {gpt_reply}')
         if is_edited:
