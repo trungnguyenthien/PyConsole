@@ -2,7 +2,7 @@
 from ..utils import secret as secret
 from ..utils.log import log
 import openai
-
+import json
 def request_text(system_specs, user_message):
     """
     SAMPLE RESPONSE:
@@ -39,6 +39,8 @@ def request_text(system_specs, user_message):
 {formatted_user_specs}
 {user_message}
 """})
+        log(f'Request to GPT {json.dumps(messages)}')
+        
         completion = openai.chat.completions.create(
             model="gpt-4",
             messages=messages,
