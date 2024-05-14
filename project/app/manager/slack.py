@@ -34,52 +34,56 @@ def slack_events(request):
 def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
-    event_ts = ts = json_data['event'].get('ts', '')
+    event_ts = json_data['event'].get('ts', '')
     
     if database_service.tracked_event(channel_id, event_ts):
         return repsponse_to_slack_received_event
-
-    log(f'handle_message_event = {channel_id}')
+    
+    
+    log(f'handle_message_event CHANNEL_ID = {channel_id}')
     if database_service.is_channel_jp(channel_id) == False:
-        log(f'is_channel_jp = {False}')
+        log(f'MESSAGE FROM  VN_CHANNEL --> SKIP')
         return repsponse_to_slack_received_event
-
+    
+    channel_jp = channel_id
+    
     try:
         message_text = json_data['event']['message'].get('text', '')
-        ts = json_data['event']['message'].get('ts', '')
+        jp_ts = json_data['event']['message'].get('ts', '')
         is_edited = True
     except:
-        ts = json_data['event'].get('ts', '')
+        jp_ts = json_data['event'].get('ts', '')
         message_text = json_data['event'].get('text', '')
         is_edited = False
     log(f'is_channel_jp = {True}')
-    channel_vn = database_service.get_channel_vn(channel_id)
+    channel_vn = database_service.get_channel_vn(channel_jp)
     log(f'channel_vn = {channel_vn}')
-    message_ts_vn = database_service.get_message_ts_vn(channel_id, ts)
-    log(f'message_ts_vn = {message_ts_vn}')
+    vn_ts = database_service.get_message_ts_vn(channel_jp, jp_ts)
     log(f"""
 Received message: {message_text}
-ts = {ts}
-channel_id = {channel_id}
+jp_ts = {jp_ts}
+channel_jp = {channel_jp}
 is_edited = {is_edited}
 channel_vn = {channel_vn}
-message_ts_vn = {message_ts_vn}
-message_ts_vn_type = {type(message_ts_vn)}
+vn_ts = {vn_ts}
+message_ts_vn_type = {type(vn_ts)}
 """)
     gpt_reply = chatgpt_service.request_text(
-        database_service.get_system_rule(channel_id),
+        database_service.get_system_rule(channel_jp),
         message_text
     )
+    
     try:
         log(f'gpt_reply = {gpt_reply}')
-        if message_ts_vn:
-            slack_service.update_message(channel_vn, ts, gpt_reply)
+        if is_edited:
+            vn_ts = slack_service.update_message(channel_vn, vn_ts, gpt_reply)
         else:
-            slack_service.send_new_message(channel_vn, gpt_reply)
-        
+            vn_ts = slack_service.send_new_message(channel_vn, gpt_reply)
         log(f'Message has beed sent to vn_channel')
     except Exception as e:
         log(f"manager/slack.py>> Error occurred: {e}")
-
+    
+    database_service.save_message_ts_vn(channel_id, channel_vn, jp_ts, vn_ts)
+    
     return repsponse_to_slack_received_event
 # BOT FUNCTIONS ----------------------------------------------------------------

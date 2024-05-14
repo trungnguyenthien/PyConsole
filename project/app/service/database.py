@@ -30,13 +30,11 @@ def get_channel_vn(channel_jp):
         log(f"service/database.py>> Error occurred: {e}")
         return None
 
-def update_message_ts_vn(channel_jp, message_ts_jp, message_ts_vn):
+def save_message_ts_vn(channel_jp, channel_vn, message_ts_jp, message_ts_vn):
   record = ChannelTsRecord.objects.filter(cid_jp = channel_jp, ts_jp = message_ts_jp).first()
-  if record:
-    record.ts_vn = message_ts_vn
-    record.save()
-  else:
-    pass
+  if record is None:
+    ChannelTsRecord(cid_jp=channel_jp, cid_vn=channel_vn, ts_jp=message_ts_jp, ts_vn=message_ts_vn).save()
+    
 
 def get_message_ts_vn(channel_jp, message_ts_jp):
   log(f'get_message_ts_vn({message_ts_jp})')

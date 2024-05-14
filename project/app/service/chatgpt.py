@@ -2,8 +2,6 @@
 from ..utils import secret as secret
 from ..utils.log import log
 import openai
-import json
-import codecs
 
 def request_text(system_specs, user_message):
     """
@@ -39,7 +37,6 @@ def request_text(system_specs, user_message):
         messages.append({"role": "system", "content": "You are useful assistant"})
         messages.append({"role": "user", "content": f"""
 {formatted_user_specs}
----
 {user_message}
 """})
         completion = openai.chat.completions.create(
