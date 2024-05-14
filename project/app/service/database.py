@@ -1,4 +1,4 @@
-from ..models import SystemMessageRecord, ChannelTsRecord, LogRecord, TaskRecord
+from ..models import SystemMessageRecord, ChannelTsRecord, LogRecord, TaskRecord, TrackingEventRecord
 from ..utils.log import log
 
 def is_channel_jp(channel_id):
@@ -9,7 +9,15 @@ def is_channel_jp(channel_id):
         log(f"service/database.py>> Error occurred: {e}")
   # log("is_channel_jp: " + record)
   return record.exists()
-    
+
+def tracked_event(channel, ts):
+  event = f'{channel}_{ts}'
+  if TrackingEventRecord.objects.filter(event=event).exists():
+    return True
+  else:
+    TrackingEventRecord(event=event).save()
+    return False
+
 def get_channel_vn(channel_jp):
   log(f'get_channel_vn({channel_jp})')
   try:

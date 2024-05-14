@@ -1,14 +1,10 @@
 # views.py
-from django.http import HttpResponse
 from ..utils.log import log
 from django.http import JsonResponse
 import json
-import threading
 from ..service import slack as slack_service
 from ..service import database as database_service
 from ..service import chatgpt as chatgpt_service
-import threading
-import asyncio
 # from asgiref.sync import sync_to_async
 
 # async_request_text = sync_to_async(chatgpt_service.request_text, thread_sensitive=False)
@@ -35,22 +31,13 @@ def slack_events(request):
 
     return repsponse_to_slack_received_event
 
-resolved_ts = []
-
 def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     event_ts = ts = json_data['event'].get('ts', '')
     
-    log(f'CurrentTs {event_ts}, ResolveTs = {resolved_ts}')
-    # TODO: Ở đây xử lý tạm trong cache resolved_ts, thực tế cần lưu trong database
-    if event_ts in resolved_ts:
-        log(f'Reject {event_ts}')
+    if database_service.tracked_event(channel_id, event_ts):
         return repsponse_to_slack_received_event
-    else:
-        log(f'Tracking {event_ts}')
-        resolved_ts.append(event_ts)
-        log(f'ResolveTs = {resolved_ts}')
 
     log(f'handle_message_event = {channel_id}')
     if database_service.is_channel_jp(channel_id) == False:

@@ -9,6 +9,11 @@ class SystemMessageRecord(models.Model):
     cid_vn = models.CharField(max_length=12, default='') # Ex: C071P11UWHJ
     message = models.TextField(default = '')
 
+class TrackingEventRecord(models.Model):
+    id = models.AutoField(primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    event = models.CharField(max_length=30, default='') # Ex: C071P11UWHJ_1715040181.995619
+
 class ChannelTsRecord(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     cid_jp = models.CharField(max_length=12, default='') # Ex: C071P11UWHJ
