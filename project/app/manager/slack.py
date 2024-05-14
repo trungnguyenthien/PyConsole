@@ -75,13 +75,15 @@ message_ts_vn_type = {type(vn_ts)}
 
     if is_complex_content(gpt_reply):
         summary = chatgpt_service.request_text(
-            "Hãy tóm tắt các ý chính của nội dung dưới đây, chú ý các cột mốc về thời gian",
+            """
+- Hãy tóm tắt các ý chính của nội dung dưới đây, chú ý các cột mốc về thời gian. 
+- Mỗi ý là một dòng ngắn.""",
             gpt_reply
         )
         gpt_reply = f""""
 {gpt_reply}
 ----------------------------------------------------------------
-** 🤖 Các ý chính **
+*🤖 CÁC Ý CHÍNH 🤖*
 {summary}
         """
     
@@ -104,4 +106,4 @@ def is_complex_content(content_string):
     # Tách chuỗi thành một list các từ
     words = content_string.split()
     # Kiểm tra nếu số lượng từ nhiều hơn 300
-    return len(words) > 300
+    return len(words) > 100
