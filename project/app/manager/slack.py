@@ -10,6 +10,7 @@ from ..service import chatgpt as chatgpt_service
 # async_request_text = sync_to_async(chatgpt_service.request_text, thread_sensitive=False)
 
 repsponse_to_slack_received_event = JsonResponse({'status': 'ok'}, status=200)
+ts_dict_jp_vn = {}
 
 
 def slack_events(request):
@@ -100,6 +101,63 @@ message_ts_vn_type = {type(vn_ts)}
     database_service.save_message_ts_vn(channel_id, channel_vn, jp_ts, vn_ts)
     
     return repsponse_to_slack_received_event
+
+
+
+# SLACK_BOT FUNCTIONS ----------------------------------------------------------------
+
+
+def adapt_handle_message_event_for_sub_messages(json_body, channel_vn, text):
+    type, message_ts, thread_ts, _ = message_type(json_body)
+    log(f"checking message type: {type} ts = {message_ts}")
+
+    if type == 1:
+        response = slack_service.send_new_message(channel_vn, text)
+        ts_dict_jp_vn[message_ts] = get_vn_ts(response)
+    if type == 2:
+        thread_ts_vn = ts_dict_jp_vn.get(thread_ts)
+        if thread_ts_vn is not None:
+            response = slack_service.send_sub_message(
+                channel_vn, thread_ts_vn, text)
+            ts_dict_jp_vn[message_ts] = get_vn_ts(response)
+    # TODO: if type == 3: # Use to edit main message
+    #     response = send_new_message(channel_vn, gpt_reply)
+    #     ts_dict_jp_vn[message_ts] = get_vn_ts(response)
+    if type == 4:
+        message_ts_vn = ts_dict_jp_vn.get(message_ts)
+        if message_ts_vn is not None:
+            response = slack_service.update_message(
+                channel_vn, message_ts_vn, text)
+
+
+def message_type(json_body):
+    event = json_body["event"]
+
+    type = event["type"]
+    parent_user_id = event.get("parent_user_id")
+    previous_message = event.get("previous_message")
+
+    if type != "message":
+        return -1, None, None, None
+    if previous_message is not None:
+        ts = event.get("message").get("ts")
+        thread_ts = event.get("message").get("thread_ts")
+        text = event.get("message").get("text")
+        return 4, ts, thread_ts, text  # Update sub message
+    if parent_user_id is not None:
+        ts = event.get("ts")
+        thread_ts = event.get("thread_ts")
+        text = event.get("text")
+        return 2, ts, thread_ts, text  # Create sub message
+    # TODO: if ... return 3 # Use to edit main message
+    ts = event.get("ts")
+    text = event.get("text")
+    return 1, ts, None, text  # Create new
+
+
+def get_vn_ts(response):
+    return response["ts"]
+
 # BOT FUNCTIONS ----------------------------------------------------------------
 
 def is_complex_content(content_string):
