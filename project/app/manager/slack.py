@@ -55,6 +55,7 @@ def handle_message_event(json_data):
         jp_ts = json_data['event'].get('ts', '')
         message_text = json_data['event'].get('text', '')
         is_edited = False
+    
     log(f'is_channel_jp = {True}')
     channel_vn = database_service.get_channel_vn(channel_jp)
     log(f'channel_vn = {channel_vn}')
@@ -80,12 +81,10 @@ message_ts_vn_type = {type(vn_ts)}
 - Mỗi ý là một dòng ngắn.""",
             gpt_reply
         )
-        gpt_reply = f""""
-{gpt_reply}
+        gpt_reply = f""""{gpt_reply}
 ----------------------------------------------------------------
 *🤖 CÁC Ý CHÍNH 🤖*
-{summary}
-        """
+{summary}"""
         gpt_reply = f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n{gpt_reply}'
     try:
         log(f'gpt_reply = {gpt_reply}')
