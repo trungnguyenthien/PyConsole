@@ -13,7 +13,8 @@
       }
 
       table {
-        width: 100%;
+        width: 1000px;
+        /* Cố định chiều rộng của bảng là 1000px */
         border-collapse: collapse;
       }
 
@@ -22,7 +23,10 @@
         border: 1px solid black;
         padding: 8px;
         text-align: left;
+        word-wrap: break-word;
+        /* Cho phép nội dung trong ô tự động xuống hàng */
       }
+
 
       /* Cố định chiều rộng của các cột Timestamp và Request Time */
       #logsTable th:nth-child(0),
