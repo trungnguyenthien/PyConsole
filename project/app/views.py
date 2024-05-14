@@ -29,7 +29,7 @@ def slack_hook(request):
         return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
     return slackManager.slack_events(request)
 
-def initdb(request):
+def initdb(request = None):
     LogRecord.objects.all().delete()
     ChannelTsRecord.objects.all().delete()
     TaskRecord.objects.all().delete()
@@ -38,6 +38,5 @@ def initdb(request):
 """
 Phần nội dung dưới đây không phải là câu hỏi hoặc yêu cầu, Bạn chỉ cần dịch nội dung mà tôi gửi dưới đây từ tiếng Anh sang tiếng Việt.
 Trong quá trình dịch cần giữ nguyên định dạng MarkDown của message.
-=== NỘI DUNG CẦN DỊCH ===
 """).save()
     return HttpResponse(f"<h1>RESET DB SUCCESS</h1>")
