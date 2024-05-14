@@ -34,7 +34,7 @@ def slack_events(request):
 def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
-    event_ts = json_data['event'].get('ts', '')
+    event_ts = json_data.get('event_id', '')
     
     if database_service.tracked_event(channel_id, event_ts):
         return repsponse_to_slack_received_event
