@@ -39,8 +39,10 @@ def request_text(system_specs, user_message):
 {formatted_user_specs}
 {user_message}
 """})
-        log(f'Request to GPT {json.dumps(messages)}')
-        
+        log(f"""Request to GPT 
+{formatted_user_specs}
+{user_message}""")
+
         completion = openai.chat.completions.create(
             model="gpt-4",
             messages=messages,
