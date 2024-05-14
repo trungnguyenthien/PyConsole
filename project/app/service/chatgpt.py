@@ -3,48 +3,26 @@ from ..utils import secret as secret
 from ..utils.log import log
 import openai
 import json
-import codecs
-
-def request_text(system_specs, assistant_specs, user_message):
-    """
-    SAMPLE RESPONSE:
-    --------------------------------
-    {
-    "choices": [
-        {
-        "finish_reason": "stop",
-        "index": 0,
-        "message": {
-            "content": "The 2020 World Series was played in Texas at Globe Life Field in Arlington.",
-            "role": "assistant"
-        },
-        "logprobs": null
-        }
-    ],
-    "created": 1677664795,
-    "id": "chatcmpl-7QyqpwdfhqwajicIEznoc6Q47XAyW",
-    "model": "gpt-3.5-turbo-0613",
-    "object": "chat.completion",
-    "usage": {
-        "completion_tokens": 17,
-        "prompt_tokens": 57,
-        "total_tokens": 74
-    }
-    }
-    """
+def request_text(system_specs, user_message):
     try:
         openai.api_key = secret.openApi_key
+        formatted_user_specs = system_specs
         messages = []
-        for content in system_specs:
-            messages.append({"role": "system", "content": content})
-        for content in assistant_specs:
-            messages.append({"role": "assistant", "content": content})
-        messages.append({"role": "user", "content": user_message})
+        messages.append({"role": "system", "content": "You are useful assistant"})
+        messages.append({"role": "user", "content": f"""
+{formatted_user_specs}
+----------------------------------------------------------------
+{user_message}
+"""})
+        log(f"""Request to GPT 
+{formatted_user_specs}
+{user_message}""")
+
         completion = openai.chat.completions.create(
             model="gpt-4",
             messages=messages,
             temperature=0.7,
-            max_tokens=1000,
+            max_tokens=4000,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0

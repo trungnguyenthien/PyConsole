@@ -36,6 +36,15 @@ python manage.py runserver --noreload
 ```sh
 # Update requirements.txt
 pip freeze > requirements.txt
+
+pip install -r requirements.txt
+
+# Create Migration code
+python manage.py makemigrations
+
+# Execute Migrate DB
+python manage.py migrate
+
 ```
 
 ## 5) Setup in CPanel
@@ -52,3 +61,9 @@ Kill Server
 ```
 pkill -f runserver
 ```
+
+```
+pip install mysqlclient psycopg2-binary openai slack_sdk APScheduler
+
+```
+pip uninstall mysqlclient psycopg2-binary

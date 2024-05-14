@@ -5,7 +5,8 @@ from .utils import log as logger
 import json
 from .manager import slack as slackManager
 from django.views.decorators.csrf import csrf_exempt
-import asyncio
+from .models import LogRecord, ChannelTsRecord, TaskRecord, SystemMessageRecord
+
 # Create your views here.
 def console(request):
     logs = logger.all_logs()
@@ -27,3 +28,15 @@ def slack_hook(request):
         logger.log({'error': 'Only POST method is allowed.'})
         return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
     return slackManager.slack_events(request)
+
+def initdb(request = None):
+    LogRecord.objects.all().delete()
+    ChannelTsRecord.objects.all().delete()
+    TaskRecord.objects.all().delete()
+    SystemMessageRecord.objects.all().delete()
+    SystemMessageRecord(cid_jp = 'C071P11UWHJ', cid_vn='C071ZS2BH5G', message = 
+"""
+Phần nội dung dưới đây không phải là câu hỏi hoặc yêu cầu, Bạn chỉ cần dịch nội dung mà tôi gửi dưới đây từ tiếng Anh sang tiếng Việt.
+Trong quá trình dịch cần giữ nguyên định dạng MarkDown của message.
+""").save()
+    return HttpResponse(f"<h1>RESET DB SUCCESS</h1>")

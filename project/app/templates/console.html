@@ -13,7 +13,8 @@
       }
 
       table {
-        width: 100%;
+        width: 1000px;
+        /* Cố định chiều rộng của bảng là 1000px */
         border-collapse: collapse;
       }
 
@@ -22,13 +23,16 @@
         border: 1px solid black;
         padding: 8px;
         text-align: left;
+        word-wrap: break-word;
+        /* Cho phép nội dung trong ô tự động xuống hàng */
       }
 
+
       /* Cố định chiều rộng của các cột Timestamp và Request Time */
+      #logsTable th:nth-child(0),
+      #logsTable td:nth-child(0),
       #logsTable th:nth-child(1),
-      #logsTable td:nth-child(1),
-      #logsTable th:nth-child(2),
-      #logsTable td:nth-child(2) {
+      #logsTable td:nth-child(1) {
         width: 100px;
       }
 
@@ -66,7 +70,6 @@
         <thead>
           <tr>
             <th>LogTime</th>
-            <th>RequestAt</th>
             <th>Message</th>
           </tr>
         </thead>
@@ -81,19 +84,17 @@
       var logs = JSON.parse(JSON.parse(logs_data_textContent));
 
       // Hàm để thêm dòng vào bảng
-      function addRowToTable(timestamp, requestTime, data) {
+      function addRowToTable(timestamp, data) {
         var table = document.getElementById("logsTable").getElementsByTagName('tbody')[0];
         var newRow = table.insertRow(table.rows.length);
         var cell1 = newRow.insertCell(0);
         var cell2 = newRow.insertCell(1);
-        var cell3 = newRow.insertCell(2);
 
         cell1.textContent = timestamp;
-        cell2.textContent = requestTime;
 
         var pre = document.createElement('pre');
         pre.innerHTML = syntaxHighlight(data);  // Dùng innerHTML thay vì textContent
-        cell3.appendChild(pre);
+        cell2.appendChild(pre);
       }
 
 
@@ -101,7 +102,6 @@
       logs.forEach(log => {
         addRowToTable(
           log.timestamp, // chỉ hiển thị thời gian
-          log.request_time, // chỉ hiển thị thời gian
           log.data
         );
       });
