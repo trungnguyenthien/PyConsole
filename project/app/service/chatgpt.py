@@ -32,7 +32,7 @@ def request_text(system_specs, user_message):
     """
     try:
         openai.api_key = secret.openApi_key
-        formatted_user_specs = '\n'.join(system_specs)
+        formatted_user_specs = system_specs
         messages = []
         messages.append({"role": "system", "content": "You are useful assistant"})
         messages.append({"role": "user", "content": f"""
