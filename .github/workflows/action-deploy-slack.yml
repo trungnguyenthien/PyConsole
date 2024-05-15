@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - slack_init_db
+      - slack
 
 name: 🚀 Deploy App to FTP
 jobs:
@@ -18,7 +18,7 @@ jobs:
     - name: 📦 Checkout code
       uses: actions/checkout@v4
       with:
-        ref: slack_init_db
+        ref: slack
 
     - name: 🔨 Install project's dependencies
       run: |
