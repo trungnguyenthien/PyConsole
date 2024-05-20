@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <title>Pass Array to JavaScript</title>
+    <title>Log Viewer</title>
     <style>
       /* Định dạng bảng và cho phép cuộn nội dung */
       .scrollable-table {
@@ -13,7 +13,8 @@
       }
 
       table {
-        width: 100%;
+        width: 1000px;
+        /* Cố định chiều rộng của bảng là 1000px */
         border-collapse: collapse;
       }
 
@@ -22,14 +23,41 @@
         border: 1px solid black;
         padding: 8px;
         text-align: left;
+        word-wrap: break-word;
+        /* Cho phép nội dung trong ô tự động xuống hàng */
       }
 
+
       /* Cố định chiều rộng của các cột Timestamp và Request Time */
+      #logsTable th:nth-child(0),
+      #logsTable td:nth-child(0),
       #logsTable th:nth-child(1),
-      #logsTable td:nth-child(1),
-      #logsTable th:nth-child(2),
-      #logsTable td:nth-child(2) {
+      #logsTable td:nth-child(1) {
         width: 100px;
+      }
+
+      .key {
+        color: rgb(0, 0, 0);
+      }
+
+      .string {
+        color: green;
+        font-style: italic;
+        /* In nghiêng cho các chuỗi */
+      }
+
+      .number {
+        color: rgb(206, 0, 0);
+        font-weight: bold;
+        /* In đậm cho các số */
+      }
+
+      .boolean {
+        color: blue;
+      }
+
+      .null {
+        color: orange;
       }
     </style>
   </head>
@@ -42,7 +70,6 @@
         <thead>
           <tr>
             <th>LogTime</th>
-            <th>RequestAt</th>
             <th>Message</th>
           </tr>
         </thead>
@@ -57,20 +84,51 @@
       var logs = JSON.parse(JSON.parse(logs_data_textContent));
 
       // Hàm để thêm dòng vào bảng
-      function addRowToTable(timestamp, requestTime, data) {
+      function addRowToTable(timestamp, data) {
         var table = document.getElementById("logsTable").getElementsByTagName('tbody')[0];
         var newRow = table.insertRow(table.rows.length);
-        newRow.innerHTML = "<td>" + timestamp + "</td><td>" + requestTime + "</td><td><pre>" + JSON.stringify(data, null, 2) + "</pre></td>";
+        var cell1 = newRow.insertCell(0);
+        var cell2 = newRow.insertCell(1);
+
+        cell1.textContent = timestamp;
+
+        var pre = document.createElement('pre');
+        pre.innerHTML = syntaxHighlight(data);  // Dùng innerHTML thay vì textContent
+        cell2.appendChild(pre);
       }
+
 
       // Duyệt qua mỗi log và thêm vào bảng
       logs.forEach(log => {
         addRowToTable(
           log.timestamp, // chỉ hiển thị thời gian
-          log.request_time, // chỉ hiển thị thời gian
           log.data
         );
       });
+
+
+      function syntaxHighlight(json) {
+        if (typeof json != 'string') {
+          json = JSON.stringify(json, undefined, 2);
+        }
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*(?:[eE][+-]?\d+)?)?)/g, function (match) {
+          var cls = 'number';
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'key';
+            } else {
+              cls = 'string';
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+          } else if (/null/.test(match)) {
+            cls = 'null';
+          }
+          return '<span class="' + cls + '">' + match + '</span>';
+        });
+      }
+
     </script>
   </body>
 

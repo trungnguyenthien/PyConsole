@@ -1,0 +1,58 @@
+display_information:
+  name: MyComtor
+  description: A bot that listens and translate message
+  background_color: "#36a64f"
+  long_description: "A bot that listens and translate message\r
+
+    A bot that listens and translate message\r
+
+    A bot that listens and translate message\r
+
+    A bot that listens and translate message\r
+
+    A bot that listens and translate message\r
+
+    A bot that listens and translate message"
+features:
+  bot_user:
+    display_name: MyComtor
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - channels:join # Bot có thể join channel
+      # channels:history và channels:read cho phép bot đọc tin nhắn từ các channel công khai mà bot là thành viên.
+      - channels:history
+      - channels:read
+      # groups:history và groups:read cho phép bot đọc tin nhắn từ các private channel (groups) mà bot là thành viên.
+      - groups:history
+      - groups:read
+      # im:history và im:read cho phép bot đọc tin nhắn từ các cuộc trò chuyện trực tiếp (direct messages) với bot.
+      - im:history
+      - im:read
+      # mpim:history và mpim:read cho phép bot đọc tin nhắn từ các cuộc trò chuyện nhóm riêng tư mà bot là một phần.
+      - mpim:history
+      - mpim:read
+      # chat:write cho phép ứng dụng của bạn gửi tin nhắn tới các channels, private groups, và direct messages trong Slack
+      - chat:write
+      # reactions:read, reactions:write cho phép ứng dụng của bạn read/write các phản ứng (reactions) đã được thêm vào các tin nhắn.
+      - reactions:read
+      - reactions:write
+
+settings:
+  event_subscriptions:
+    request_url: https://dauden.cloud/pyslack/events
+    bot_events:
+      - message.channels
+      - message.groups
+      - message.im
+      - message.mpim
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false
+
+
+
+
+# Bot chỉ có thể đọc tin nhắn từ các channels mà nó là thành viên. Bạn phải thêm bot vào mỗi channel mà bạn muốn nó lắng nghe.
+# Để thêm bot vào một channel, bạn có thể sử dụng lệnh `/invite @MyComtor`` trong channel đó.

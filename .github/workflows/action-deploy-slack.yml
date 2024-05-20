@@ -1,0 +1,42 @@
+on:
+  push:
+    branches:
+      - slack
+
+name: 🚀 Deploy App to FTP
+jobs:
+  ftpdeploy:
+    name: ⤵️ AutoDeploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🐍 Setup Python Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: 📦 Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: slack
+
+    - name: 🔨 Install project's dependencies
+      run: |
+        cd project
+        pip install -r requirements.txt
+
+    - name: 🎉 FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      with:
+        server: ftp.dauden.cloud
+        port: 21
+        protocol: ftp
+        username: ${{ secrets.ftp_username }}
+        password: ${{ secrets.ftp_password }}
+        server-dir: py/slack/
+        local-dir: ./
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          fileToExclude.txt

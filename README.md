@@ -36,4 +36,34 @@ python manage.py runserver --noreload
 ```sh
 # Update requirements.txt
 pip freeze > requirements.txt
+
+pip install -r requirements.txt
+
+# Create Migration code
+python manage.py makemigrations
+
+# Execute Migrate DB
+python manage.py migrate
+
 ```
+
+## 5) Setup in CPanel
+
+After push app to FTP
+Open terminal then
+
+```
+source /home/tsrqcmjv/virtualenv/py/slack/project/3.8/bin/activate && cd /home/tsrqcmjv/py/slack/project && pip install -r requirements.txt
+```
+
+Kill Server
+
+```
+pkill -f runserver
+```
+
+```
+pip install mysqlclient psycopg2-binary openai slack_sdk APScheduler
+
+```
+pip uninstall mysqlclient psycopg2-binary

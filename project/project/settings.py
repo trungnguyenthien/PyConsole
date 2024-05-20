@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +27,11 @@ SECRET_KEY = 'django-insecure-&s1i(v_4=yi8+v!5u(@z7wi*4y0zs##k36ael5xd14=wm8lr67
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Cài đặt ALLOWED_HOSTS giúp bảo vệ ứng dụng của bạn khỏi những kẻ tấn công có thể gửi yêu cầu đến server với một HTTP Host header giả mạo. Nếu ALLOWED_HOSTS không được cấu hình đúng, ứng dụng của bạn có thể dễ dàng trở thành mục tiêu của các cuộc tấn công như DNS rebinding hoặc các cuộc tấn công có mục đích khai thác những cấu hình lỏng lẻo liên quan đến quản lý domain và subdomain.
+ALLOWED_HOSTS = ["127.0.0.1", "dauden.cloud"]
+
+# STATIC_ROOT là đường dẫn đến thư mục trên server của bạn nơi tất cả các tệp tĩnh sẽ được thu thập và lưu trữ khi bạn chạy lệnh collectstatic. Lệnh này là một phần của quá trình triển khai ứng dụng Django, và nó sẽ tìm kiếm các tệp tĩnh trong tất cả các ứng dụng của dự án Django của bạn (và cả trong các thư viện/thành phần bên thứ ba mà dự án sử dụng), sau đó sao chép tất cả các tệp này vào thư mục STATIC_ROOT.
+STATIC_ROOT = '/home/tsrqcmjv/public_html/pyslack'
 
 
 # Application definition
@@ -48,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app.middleware.RequestLoggerMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -73,12 +80,19 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': os.getenv("DB_ENGINE"),
+    #     'NAME': os.getenv("DB_NAME"),
+    #     'HOST': os.getenv("DB_HOST"),
+    #     'PORT': os.getenv("DB_PORT"),
+    #     'USER': os.getenv("DB_USER"),
+    #     'PASSWORD': os.getenv("DB_PASSWORD"),
+    # },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
