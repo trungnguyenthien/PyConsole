@@ -10,7 +10,6 @@ from ..service import chatgpt as chatgpt_service
 # async_request_text = sync_to_async(chatgpt_service.request_text, thread_sensitive=False)
 
 response_to_slack_received_event = JsonResponse({'status': 'ok'}, status=200)
-# ts_dict_jp_vn = {}
 
 
 def slack_events(request):
@@ -53,58 +52,6 @@ def handle_message_event(json_data):
 
     # Handle action
     handle_complex_action(json_data, jp_channel, vn_channel, )
-
-    # try:
-    #     message_text = json_data['event']['message'].get('text', '')
-    #     jp_ts = json_data['event']['message'].get('ts', '')
-    #     is_edited = True
-    # except:
-    #     jp_ts = json_data['event'].get('ts', '')
-    #     message_text = json_data['event'].get('text', '')
-    #     is_edited = False
-
-#     log(f'is_channel_jp = {True}')
-#     channel_vn = database_service.get_channel_vn(channel_jp)
-#     log(f'channel_vn = {channel_vn}')
-#     vn_ts = database_service.get_message_ts_vn(channel_jp, jp_ts)
-#     log(f"""
-# Received message: {message_text}
-# jp_ts = {jp_ts}
-# channel_jp = {channel_jp}
-# is_edited = {is_edited}
-# channel_vn = {channel_vn}
-# vn_ts = {vn_ts}
-# message_ts_vn_type = {type(vn_ts)}
-# """)
-#     gpt_reply = chatgpt_service.request_text(
-#         database_service.get_system_rule(channel_jp),
-#         message_text
-#     )
-
-#     if is_complex_content(gpt_reply):
-#         summary = chatgpt_service.request_text(
-#             """
-# - Hãy tóm tắt các ý chính của nội dung dưới đây, chú ý các cột mốc về thời gian.
-# - Mỗi ý là một dòng ngắn.""",
-#             gpt_reply
-#         )
-#         gpt_reply = f""""{gpt_reply}
-# ----------------------------------------------------------------
-# *🤖 CÁC Ý CHÍNH 🤖*
-# {summary}"""
-
-#     gpt_reply = f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n{gpt_reply}'
-    # try:
-    #     log(f'gpt_reply = {gpt_reply}')
-    #     if is_edited:
-    #         vn_ts = slack_service.update_message(channel_vn, vn_ts, gpt_reply)
-    #     else:
-    #         vn_ts = slack_service.send_new_message(channel_vn, gpt_reply)
-    #     log(f'Message has beed sent to vn_channel')
-    # except Exception as e:
-    #     log(f"manager/slack.py>> Error occurred: {e}")
-
-    # database_service.save_message_ts_vn(channel_id, channel_vn, jp_ts, vn_ts)
 
     return response_to_slack_received_event
 
