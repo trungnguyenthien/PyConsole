@@ -93,6 +93,14 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
                 response = slack_service.update_message(
                     vn_channel, vn_previous_message_timestamp, gpt_reply)
 
+        if mssg_type == 4:  # delete message
+            jp_deleted_message_timestamp = jp_message_timestamp
+            vn_deleted_message_timestamp = get_vn_timestamp(jp_channel,
+                                                            jp_deleted_message_timestamp)
+            if vn_deleted_message_timestamp is not None:
+                response = slack_service.delete_message(
+                    vn_channel, vn_deleted_message_timestamp)
+
         log(f'Message has beed sent to vn_channel')
     except Exception as e:
         log(f"manager/slack.py>> Error occurred: {e}")
@@ -154,10 +162,17 @@ def message_type_v2(json_body):
 
     # (3) edit message
     if subtype == "message_changed":
+        # or event.get("previous_message").get("ts")
         previous_message_timestamp = event.get("message").get(
-            "ts")  # or event.get("previous_message").get("ts")
+            "ts")
         text = event.get("message").get("text")
         return 3, previous_message_timestamp, None, text
+
+    # (4) delete message
+    if subtype == "message_deleted":
+        # or event.get("previous_message").get("ts")
+        message_deleted_timestamp = event.get("deleted_ts")
+        return 4, message_deleted_timestamp, None, None
 
     # (1) create new main message
     if parent_message_timestamp is None:
