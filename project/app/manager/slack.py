@@ -76,10 +76,10 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
                            jp_message_timestamp, vn_message_timestamp)
 
         if mssg_type == 2:  # create new sub message
-            vn_parent_message_timestamp = get_vn_timestamp(
-                jp_parent_message_timestamp)
+            vn_parent_message_timestamp = get_vn_timestamp(jp_channel,
+                                                           jp_parent_message_timestamp)
             if vn_parent_message_timestamp is not None:
-                response = get_vn_timestamp(
+                response = slack_service.send_sub_message(
                     vn_channel, vn_parent_message_timestamp, gpt_reply)
                 vn_message_timestamp = response.get("ts")
                 save_timestamp(jp_channel, vn_channel,
@@ -87,8 +87,8 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
 
         if mssg_type == 3:  # edit message
             jp_previous_message_timestamp = jp_message_timestamp
-            vn_previous_message_timestamp = get_vn_timestamp(
-                jp_previous_message_timestamp)
+            vn_previous_message_timestamp = get_vn_timestamp(jp_channel,
+                                                             jp_previous_message_timestamp)
             if vn_previous_message_timestamp is not None:
                 response = slack_service.update_message(
                     vn_channel, vn_previous_message_timestamp, gpt_reply)
