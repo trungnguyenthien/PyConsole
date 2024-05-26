@@ -32,22 +32,22 @@ def slack_events(request):
 
     return repsponse_to_slack_received_event
 
+
 def handle_message_event(json_data):
     # Trích xuất và log tin nhắn
     channel_id = json_data['event'].get('channel', '')
     event_ts = json_data.get('event_id', '')
-    
+
     if database_service.tracked_event(channel_id, event_ts):
         return repsponse_to_slack_received_event
-    
-    
+
     log(f'handle_message_event CHANNEL_ID = {channel_id}')
     if database_service.is_channel_jp(channel_id) == False:
         log(f'MESSAGE FROM  VN_CHANNEL --> SKIP')
         return repsponse_to_slack_received_event
-    
+
     channel_jp = channel_id
-    
+
     try:
         message_text = json_data['event']['message'].get('text', '')
         jp_ts = json_data['event']['message'].get('ts', '')
@@ -56,7 +56,7 @@ def handle_message_event(json_data):
         jp_ts = json_data['event'].get('ts', '')
         message_text = json_data['event'].get('text', '')
         is_edited = False
-    
+
     log(f'is_channel_jp = {True}')
     channel_vn = database_service.get_channel_vn(channel_jp)
     log(f'channel_vn = {channel_vn}')
@@ -86,7 +86,7 @@ message_ts_vn_type = {type(vn_ts)}
 ----------------------------------------------------------------
 *🤖 CÁC Ý CHÍNH 🤖*
 {summary}"""
-        
+
     gpt_reply = f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n{gpt_reply}'
     try:
         log(f'gpt_reply = {gpt_reply}')
@@ -97,68 +97,93 @@ message_ts_vn_type = {type(vn_ts)}
         log(f'Message has beed sent to vn_channel')
     except Exception as e:
         log(f"manager/slack.py>> Error occurred: {e}")
-    
-    database_service.save_message_ts_vn(channel_id, channel_vn, jp_ts, vn_ts)
-    
-    return repsponse_to_slack_received_event
 
+    database_service.save_message_ts_vn(channel_id, channel_vn, jp_ts, vn_ts)
+
+    return repsponse_to_slack_received_event
 
 
 # SLACK_BOT FUNCTIONS ----------------------------------------------------------------
 
 
-def adapt_handle_message_event_for_sub_messages(json_body, channel_vn, text):
-    type, message_ts, thread_ts, _ = message_type(json_body)
-    log(f"checking message type: {type} ts = {message_ts}")
+def adapt_handle_message_event_for_sub_messages(json_body, vn_channel, ai_text):
+    mssg_type, jp_message_timestamp, jp_parent_message_timestamp, text = message_type_v2(
+        json_body)
 
-    if type == 1:
-        response = slack_service.send_new_message(channel_vn, text)
-        ts_dict_jp_vn[message_ts] = get_vn_ts(response)
-    if type == 2:
-        thread_ts_vn = ts_dict_jp_vn.get(thread_ts)
-        if thread_ts_vn is not None:
-            response = slack_service.send_sub_message(
-                channel_vn, thread_ts_vn, text)
-            ts_dict_jp_vn[message_ts] = get_vn_ts(response)
-    # TODO: if type == 3: # Use to edit main message
-    #     response = send_new_message(channel_vn, gpt_reply)
-    #     ts_dict_jp_vn[message_ts] = get_vn_ts(response)
-    if type == 4:
-        message_ts_vn = ts_dict_jp_vn.get(message_ts)
-        if message_ts_vn is not None:
+    if mssg_type == 1:  # create new main message
+        response = slack_service.send_new_message(vn_channel, text)
+        vn_message_timestamp = response.get("ts")
+        save_timestamp(jp_message_timestamp, vn_message_timestamp)
+
+    if mssg_type == 2:  # create new sub message
+        vn_parent_message_timestamp = get_vn_timestamp(
+            jp_parent_message_timestamp)
+        if vn_parent_message_timestamp is not None:
+            response = get_vn_timestamp(
+                vn_channel, vn_parent_message_timestamp, text)
+            vn_message_timestamp = response.get("ts")
+            save_timestamp(jp_message_timestamp, vn_message_timestamp)
+
+    if mssg_type == 3:  # edit message
+        jp_previous_message_timestamp = jp_message_timestamp
+        vn_previous_message_timestamp = get_vn_timestamp(
+            jp_previous_message_timestamp)
+        if vn_previous_message_timestamp is not None:
             response = slack_service.update_message(
-                channel_vn, message_ts_vn, text)
+                vn_channel, vn_previous_message_timestamp, text)
 
 
-def message_type(json_body):
+def message_type_v2(json_body):
+    # @return: message_type, message_timestamp, parent_message_timestamp, text
+    ####### message_type #######
+    # -1: no action
+    # 1 : create new main message
+    # 2 : create new sub message
+    # 3 : edit message
+    # 4 : delete message (TODO: delete main and delete sub)
+    ############################
     event = json_body["event"]
 
-    type = event["type"]
-    parent_user_id = event.get("parent_user_id")
-    previous_message = event.get("previous_message")
+    type = event.get("type")
+    subtype = event.get("subtype")
 
+    parent_message_timestamp = event.get("thread_ts")
+
+    # (-1) no action
     if type != "message":
         return -1, None, None, None
-    if previous_message is not None:
-        ts = event.get("message").get("ts")
-        thread_ts = event.get("message").get("thread_ts")
+
+    # (3) edit message
+    if subtype == "message_changed":
+        previous_message_timestamp = event.get("message").get(
+            "ts")  # or event.get("previous_message").get("ts")
         text = event.get("message").get("text")
-        return 4, ts, thread_ts, text  # Update sub message
-    if parent_user_id is not None:
-        ts = event.get("ts")
-        thread_ts = event.get("thread_ts")
+        return 3, previous_message_timestamp, None, text
+
+    # (1) create new main message
+    if parent_message_timestamp is None:
+        message_timestamp = event.get("ts")
         text = event.get("text")
-        return 2, ts, thread_ts, text  # Create sub message
-    # TODO: if ... return 3 # Use to edit main message
-    ts = event.get("ts")
+        return 1, message_timestamp, None, text
+
+    # (2) create new sub message
     text = event.get("text")
-    return 1, ts, None, text  # Create new
+    message_timestamp = event.get("ts")
+    return 2, message_timestamp, parent_message_timestamp, text
 
 
-def get_vn_ts(response):
-    return response["ts"]
+def save_timestamp(jp_msg_ts, vn_msg_ts):
+    # TODO: Save to database for {key: value} with {jp_message_timestamp: vn_message_timestamp}
+    if vn_msg_ts is not None:
+        ts_dict_jp_vn[jp_msg_ts] = vn_msg_ts
+
+
+def get_vn_timestamp(jp_msg_ts):
+    # TODO: Get from database key = jp_message_timestamp
+    return ts_dict_jp_vn[jp_msg_ts]
 
 # BOT FUNCTIONS ----------------------------------------------------------------
+
 
 def is_complex_content(content_string):
     # Tách chuỗi thành một list các từ
