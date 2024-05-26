@@ -20,8 +20,7 @@ def update_message(channel_id, ts, new_message):
         )
         log(f'chat_update response = {json_object(response)}')
         log(["Message updated successfully:", response['message']['text']])
-        vn_ts = response['message']['ts']
-        return vn_ts
+        return response
     except SlackApiError as e:
         log(f"Error updating message: {e.response['error']}")
     return None
@@ -38,11 +37,10 @@ def send_new_message(channel_id, message):
         )
         log(f'send_new_message response = {json_object(response)}')
         log(["Message sent successfully:", response['message']['text']])
-        vn_ts = response['message']['ts']
-        return vn_ts
+        return response
     except SlackApiError as e:
         log(f"Error sending message: {e.response['error']}")
-    
+
     return None
 
 
@@ -60,3 +58,19 @@ def send_sub_message(channel_id, thread_ts, message):
         return response
     except SlackApiError as e:
         log(f"Error sending message: {e.response['error']}")
+
+
+def delete_message(channel_id, message_id):
+    # Example usage:
+    # delete_message('C1234567890', '1714993823.193669')
+    log(f'delete_message({channel_id}, {message_id})')
+    try:
+        # Call the chat.chatDelete method using the built-in WebClient
+        response = client.chat_delete(
+            channel=channel_id,
+            ts=message_id
+        )
+        log(["Message delete successfully:", response])
+        return response
+    except SlackApiError as e:
+        log(f"Error delete message: {e.response['error']}")
