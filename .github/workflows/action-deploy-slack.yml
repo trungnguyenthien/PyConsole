@@ -1,6 +1,3 @@
-env:
-  BRANCH_NAME: trung-impl-slash-cmd
-
 on:
   push:
     branches:
@@ -11,7 +8,8 @@ jobs:
   ftpdeploy:
     name: ⤵️ AutoDeploy
     runs-on: ubuntu-latest
-
+    env:
+      BRANCH_NAME: trung-impl-slash-cmd
     steps:
     - name: 🐍 Setup Python Environment
       uses: actions/setup-python@v5
