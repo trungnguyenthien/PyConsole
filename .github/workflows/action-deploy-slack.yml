@@ -1,14 +1,16 @@
+#🌈 Cấu hình branch để thực hiện build và deploy tự động lên ftp
+
+
 on:
   push:
     branches:
-      - slack
+      - trung-impl-slashcmd # 🌈 UPDATE BRANCH NAME HERE
 
 name: 🚀 Deploy App to FTP
 jobs:
   ftpdeploy:
     name: ⤵️ AutoDeploy
     runs-on: ubuntu-latest
-
     steps:
     - name: 🐍 Setup Python Environment
       uses: actions/setup-python@v5
@@ -18,7 +20,7 @@ jobs:
     - name: 📦 Checkout code
       uses: actions/checkout@v4
       with:
-        ref: slack
+        ref: trung-impl-slashcmd # 🌈 UPDATE BRANCH NAME HERE
 
     - name: 🔨 Install project's dependencies
       run: |
