@@ -4,7 +4,7 @@
 on:
   push:
     branches:
-      - trung-impl-slash-cmd # 🌈 UPDATE BRANCH NAME HERE
+      - trung-impl-slashcmd # 🌈 UPDATE BRANCH NAME HERE
 
 name: 🚀 Deploy App to FTP
 jobs:
@@ -20,7 +20,7 @@ jobs:
     - name: 📦 Checkout code
       uses: actions/checkout@v4
       with:
-        ref: trung-impl-slash-cmd # 🌈 UPDATE BRANCH NAME HERE
+        ref: trung-impl-slashcmd # 🌈 UPDATE BRANCH NAME HERE
 
     - name: 🔨 Install project's dependencies
       run: |
