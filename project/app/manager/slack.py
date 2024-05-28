@@ -47,7 +47,8 @@ def handle_message_event(json_data):
     # Log thông tin channel
     log(f'handle_message_event CHANNEL_ID = {channel_id}')
     if database_service.is_channel_jp(channel_id) == False:
-        log(f'MESSAGE FROM  VN_CHANNEL --> SKIP')
+        log(f'MESSAGE FROM  VN_CHANNEL --> SKIP (but action command)')
+        handle_command_action(json_data)
         return response_to_slack_received_event
 
     jp_channel = channel_id
@@ -203,7 +204,7 @@ def get_vn_timestamp(jp_channel_id, jp_msg_ts):
 # SLACK_BOT COMMAND FUNCTIONS ----------------------------------------------------------------
 
 
-def handle_command_action(json_body, jp_channel, vn_channel):
+def handle_command_action(json_body):
     # (1) get command type and attributes
     command_type, request_channel, request_ts, attributes = get_command_attributes(
         json_body)
