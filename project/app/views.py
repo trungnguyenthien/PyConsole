@@ -44,7 +44,7 @@ Trong quá trình dịch cần giữ nguyên định dạng MarkDown của messa
 
 
 @csrf_exempt
-def summary(request):
+def slack_summary(request):
     logger.log('RECEIVE CMD SUMMARY')
     if request.method != 'POST':
         logger.log({'error': 'Only POST method is allowed.'})
