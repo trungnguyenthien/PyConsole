@@ -24,17 +24,15 @@ def slack_summary(request):
     headers = dict(request.headers)
     log("EVENT HEADER\n" + json.dumps(headers, indent=2))
     log("EVENT POSTBODY\n" + json.dumps(body_dict, indent=2))
-    # request_channel = body_dict['channel_id']
-    # text = body_dict['text']
-    # parts = text.split('/')
-    # # Lấy hai phần cuối cùng
-    # channel_id = parts[-2]
-    # ts = parts[-1]
-    # # Kết quả
-    # print(f"channel_id = '{channel_id}'")
-    # print(f"ts = '{ts}'")
-    
-    return JsonResponse({"response_type": "in_channel","text": "It's 80 degrees right now."})
+    request_channel = body_dict['channel_id']
+    text = body_dict['text']
+    try:
+       source_channel, thread_ts = get_thread_ts_source_channel(text)
+    except Exception as e:
+        log(f"Error updating message: {e}")
+        return JsonResponse({"response_type": "in_channel","text": "Định dạng yêu cầu không đúng format"})
+    reply = summaries_conversations(source_channel, thread_ts)
+    return JsonResponse({"response_type": "in_channel","text": f"{reply}"})
 
 '''
 SAMPLE body_dict
@@ -56,3 +54,66 @@ SAMPLE body_dict
 }
 
 '''
+
+
+def summaries_conversations(source_channel, thread_ts):
+    # (3) collect all conversions from source channel
+    conversations = collect_conversations(source_channel, thread_ts)
+    if not conversations:
+        return
+
+    # (4) request chat_gpt to translate
+    gpt_reply = get_assistant_summarization(conversations)
+    return gpt_reply
+    # try:
+    #     log(f'gpt_reply = {gpt_reply}')
+
+    #     # (5) send back to request thread as sub message
+    #     slack_service.send_new_message(request_channel, gpt_reply)
+
+    #     log(f'Message has beed sent to vn_channel')
+    # except Exception as e:
+    #     log(f"manager/slack.py>> Error occurred: {e}")
+
+
+def collect_conversations(source_channel, thread_ts):
+    response = slack_service.get_all_conversions(source_channel, thread_ts)
+    all_messages = []
+    for item in response.data["messages"]:
+        # ts = item.get("ts")
+        thread_ts = item.get("thread_ts")
+        text = item.get("text")
+        all_messages.append(f"- {text}")
+
+    message = "\n".join(all_messages)
+    return message
+
+
+# i.e: <https://ntrung.slack.com/archives/C071P11UWHJ/p1716857049521879?thread_ts=1716856857.662559&cid=C071P11UWHJ>
+def get_thread_ts_source_channel(link):
+    parsed_url = urlparse(link)
+    parsed_qs = parse_qs(parsed_url.query)
+    thread_ts = parsed_qs['thread_ts'][0]
+    source_channel = parsed_qs['cid'][0]
+
+    return source_channel, thread_ts
+
+# TEMPLATE FUNCTIONS ----------------------------------------------------------------
+
+
+def get_assistant_summarization(message_text):
+
+    gpt_reply = chatgpt_service.request_text(
+        """
+- Hãy dịch đoạn hội thoại bên dưới.
+- Sau khi dịch xong hãy tổng hợp lại theo định dạng như bên dưới:
+🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳----- Translate -----🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
+{Nội dung dịch}
+----------------------------------------------------------------
+*🤖 CÁC Ý CHÍNH 🤖*
+{Nội dung tóm tắt}
+""",
+        message_text
+    )
+
+    return gpt_reply
