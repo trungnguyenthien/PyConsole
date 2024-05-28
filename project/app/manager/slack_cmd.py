@@ -24,15 +24,15 @@ def slack_summary(request):
     headers = dict(request.headers)
     log("EVENT HEADER\n" + json.dumps(headers, indent=2))
     log("EVENT POSTBODY\n" + json.dumps(body_dict, indent=2))
-    request_channel = body_dict['channel_id']
-    text = body_dict['text']
-    parts = text.split('/')
-    # Lấy hai phần cuối cùng
-    channel_id = parts[-2]
-    ts = parts[-1]
-    # Kết quả
-    print(f"channel_id = '{channel_id}'")
-    print(f"ts = '{ts}'")
+    # request_channel = body_dict['channel_id']
+    # text = body_dict['text']
+    # parts = text.split('/')
+    # # Lấy hai phần cuối cùng
+    # channel_id = parts[-2]
+    # ts = parts[-1]
+    # # Kết quả
+    # print(f"channel_id = '{channel_id}'")
+    # print(f"ts = '{ts}'")
     
     return JsonResponse({"response_type": "in_channel","text": "It's 80 degrees right now."})
 
