@@ -31,8 +31,8 @@ def slack_summary(request):
     except Exception as e:
         log(f"Error updating message: {e}")
         return JsonResponse({"response_type": "in_channel","text": "Định dạng yêu cầu không đúng format"})
-    reply = summaries_conversations(source_channel, thread_ts)
-    return JsonResponse({"response_type": "in_channel","text": f"{reply}"})
+    summaries_conversations(request_channel, source_channel, thread_ts)
+    return JsonResponse({"response_type": "in_channel","text": "Chờ chút"})
 
 '''
 SAMPLE body_dict
@@ -56,7 +56,7 @@ SAMPLE body_dict
 '''
 
 
-def summaries_conversations(source_channel, thread_ts):
+def summaries_conversations(request_channel, source_channel, thread_ts):
     # (3) collect all conversions from source channel
     conversations = collect_conversations(source_channel, thread_ts)
     if not conversations:
@@ -64,16 +64,16 @@ def summaries_conversations(source_channel, thread_ts):
 
     # (4) request chat_gpt to translate
     gpt_reply = get_assistant_summarization(conversations)
-    return gpt_reply
-    # try:
-    #     log(f'gpt_reply = {gpt_reply}')
+    # return gpt_reply
+    try:
+        log(f'gpt_reply = {gpt_reply}')
 
-    #     # (5) send back to request thread as sub message
-    #     slack_service.send_new_message(request_channel, gpt_reply)
+        # (5) send back to request thread as sub message
+        slack_service.send_new_message(request_channel, gpt_reply)
 
-    #     log(f'Message has beed sent to vn_channel')
-    # except Exception as e:
-    #     log(f"manager/slack.py>> Error occurred: {e}")
+        log(f'Message has beed sent to vn_channel')
+    except Exception as e:
+        log(f"manager/slack.py>> Error occurred: {e}")
 
 
 def collect_conversations(source_channel, thread_ts):
@@ -103,8 +103,7 @@ def get_thread_ts_source_channel(link):
 
 
 def get_assistant_summarization(message_text):
-
-    gpt_reply = chatgpt_service.request_text(
+    return chatgpt_service.request_text(
         """
 - Hãy dịch đoạn hội thoại bên dưới.
 - Sau khi dịch xong hãy tổng hợp lại theo định dạng như bên dưới:
@@ -113,8 +112,4 @@ def get_assistant_summarization(message_text):
 ----------------------------------------------------------------
 *🤖 CÁC Ý CHÍNH 🤖*
 {Nội dung tóm tắt}
-""",
-        message_text
-    )
-
-    return gpt_reply
+""",message_text)
