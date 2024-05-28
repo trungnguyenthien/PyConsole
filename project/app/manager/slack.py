@@ -227,6 +227,16 @@ def summaries_conversations(request_channel, request_ts, attributes):
     if not conversations:
         return
 
+    gpt_reply = get_assistant_summarization(
+        request_channel, request_ts, conversations)
+
+    try:
+        log(f'gpt_reply = {gpt_reply}')
+
+        log(f'Message has beed sent to vn_channel')
+    except Exception as e:
+        log(f"manager/slack.py>> Error occurred: {e}")
+
     # (4) request chat_gpt to translate
     # TODO: get from chat_gpt
     conversations_ai = conversations
@@ -280,6 +290,31 @@ def get_thread_ts_source_channel(link):
     source_channel = parsed_qs['cid'][0]
 
     return source_channel, thread_ts
+
+# TEMPLATE FUNCTIONS ----------------------------------------------------------------
+
+
+def get_assistant_summarization(request_channel, request_ts, message_text):
+    log(f"""
+Received message: {message_text}
+From channel = {request_channel}
+From ts = {request_ts}
+""")
+
+    gpt_reply = chatgpt_service.request_text(
+        """
+- Hãy dịch đoạn hội thoại bên dưới.
+- Sau khi dịch xong hãy tổng hợp lại theo định dạng như bên dưới:
+🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
+{Nội dung dịch}
+*🤖 CÁC Ý CHÍNH 🤖*
+{Nội dung tóm tắt}
+""",
+        message_text
+    )
+
+    return gpt_reply
+
 # BOT FUNCTIONS ----------------------------------------------------------------
 
 
