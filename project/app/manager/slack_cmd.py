@@ -7,7 +7,7 @@ from ..service import database as database_service
 from ..service import chatgpt as chatgpt_service
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
-from django.http import HttpResponse
+import urllib.parse
 
 # from asgiref.sync import sync_to_async
 
@@ -91,6 +91,7 @@ def collect_conversations(source_channel, thread_ts):
 
 # i.e: <https://ntrung.slack.com/archives/C071P11UWHJ/p1716857049521879?thread_ts=1716856857.662559&cid=C071P11UWHJ>
 def get_thread_ts_source_channel(link):
+    link = urllib.parse.unquote(link)
     parsed_url = urlparse(link)
     parsed_qs = parse_qs(parsed_url.query)
     thread_ts = parsed_qs['thread_ts'][0]
