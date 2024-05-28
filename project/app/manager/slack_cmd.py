@@ -19,6 +19,7 @@ summary_command_list = ["@bot_magic", "@comter", "@MyComter"]
 
 def slack_summary(request):
     # Lấy dữ liệu từ yêu cầu Slack và giải mã từ UTF-8
+    log("EVENT POSTBODY\n" + json.dumps(json.loads(request.body), indent=2))
     body = request.body.decode("utf-8")
     headers = dict(request.headers)
     log("EVENT HEADER\n" + json.dumps(headers, indent=2))
