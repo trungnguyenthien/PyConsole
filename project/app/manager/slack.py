@@ -227,23 +227,20 @@ def summaries_conversations(request_channel, request_ts, attributes):
     if not conversations:
         return
 
+    # (4) request chat_gpt to translate
     gpt_reply = get_assistant_summarization(
         request_channel, request_ts, conversations)
 
     try:
         log(f'gpt_reply = {gpt_reply}')
 
+        # (5) send back to request thread as sub message
+        slack_service.send_sub_message(
+            request_channel, request_ts, gpt_reply)
+
         log(f'Message has beed sent to vn_channel')
     except Exception as e:
         log(f"manager/slack.py>> Error occurred: {e}")
-
-    # (4) request chat_gpt to translate
-    # TODO: get from chat_gpt
-    conversations_ai = conversations
-
-    # (5) send back to request thread as sub message
-    slack_service.send_sub_message(
-        request_channel, request_ts, conversations_ai)
 
 
 def collect_conversations(source_channel, thread_ts):
