@@ -7,6 +7,7 @@ from ..service import database as database_service
 from ..service import chatgpt as chatgpt_service
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
+from django.http import HttpResponse
 
 # from asgiref.sync import sync_to_async
 
@@ -33,7 +34,7 @@ def slack_summary(request):
     print(f"channel_id = '{channel_id}'")
     print(f"ts = '{ts}'")
     
-    return JsonResponse({"response_type": "in_channel", "text": "It's 80 degrees right now."}, status=200)
+    return HttpResponse(status=200)
 
 '''
 SAMPLE body_dict
