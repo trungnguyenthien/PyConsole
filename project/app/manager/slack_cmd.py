@@ -33,7 +33,7 @@ def slack_summary(request):
     print(f"channel_id = '{channel_id}'")
     print(f"ts = '{ts}'")
     
-    return JsonResponse({f"Đợi tí tôi sẽ tóm tắt nội dung của {text}"}, status=200)
+    return JsonResponse({"response_type": "in_channel", "text": "It's 80 degrees right now."}, status=200)
 
 '''
 SAMPLE body_dict
