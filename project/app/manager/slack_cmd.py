@@ -24,7 +24,6 @@ def slack_summary(request):
     # except Exception as e:
     #     log(f"Error updating message: {e.response['error']}")
 
-    log("EVENT POSTBODY\n" + json.dumps(request.body, indent=2))
     body = request.body.decode("utf-8")
     headers = dict(request.headers)
     log("EVENT HEADER\n" + json.dumps(headers, indent=2))
