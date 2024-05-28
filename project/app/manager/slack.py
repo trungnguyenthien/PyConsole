@@ -250,7 +250,7 @@ def collect_conversations(source_channel, thread_ts):
         # ts = item.get("ts")
         thread_ts = item.get("thread_ts")
         text = item.get("text")
-        all_messages.append(text)
+        all_messages.append(f"- {text}")
 
     message = "\n".join(all_messages)
     return message
@@ -302,8 +302,9 @@ From ts = {request_ts}
         """
 - Hãy dịch đoạn hội thoại bên dưới.
 - Sau khi dịch xong hãy tổng hợp lại theo định dạng như bên dưới:
-🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
+🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳----- Translate -----🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
 {Nội dung dịch}
+----------------------------------------------------------------
 *🤖 CÁC Ý CHÍNH 🤖*
 {Nội dung tóm tắt}
 """,
