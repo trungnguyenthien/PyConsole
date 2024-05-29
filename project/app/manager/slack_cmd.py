@@ -8,7 +8,7 @@ from ..service import chatgpt as chatgpt_service
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 import urllib.parse
-
+import threading
 # from asgiref.sync import sync_to_async
 
 # async_request_text = sync_to_async(chatgpt_service.request_text, thread_sensitive=False)
@@ -31,8 +31,8 @@ def slack_summary(request):
     except Exception as e:
         log(f"Error updating message: {e}")
         return JsonResponse({"response_type": "in_channel","text": "Định dạng yêu cầu không đúng format"})
-    summaries_conversations(request_channel, source_channel, thread_ts)
-    return JsonResponse({"response_type": "in_channel","text": "Chờ chút"})
+    threading.Thread(target=summaries_conversations, args=(request_channel, source_channel, thread_ts)).start()
+    return JsonResponse({"response_type": "in_channel"}, status=200)
 
 '''
 SAMPLE body_dict
