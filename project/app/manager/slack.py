@@ -161,28 +161,21 @@ def message_type_v2(json_body):
     event = json_body["event"]
     type = event.get("type")
     subtype = event.get("subtype")
-    isDeleteEvent = event['message'].get("subtype", '') == 'tombstone'
-
     parent_message_timestamp = event.get("thread_ts")
 
     # (-1) no action
     if type != "message":
         return -1, None, None, None
     
-    # (4.2) delete message
-    if isDeleteEvent:
-        # or event.get("previous_message").get("ts")
-        previous_message_timestamp = event.get("message").get(
-            "ts")
-        return 4, previous_message_timestamp, None, None
-    
     # (3) edit message
     if subtype == "message_changed":
-        # or event.get("previous_message").get("ts")
-        previous_message_timestamp = event.get("message").get(
-            "ts")
-        text = event.get("message").get("text")
-        return 3, previous_message_timestamp, None, text
+        isDeleteEvent = event['message'].get("subtype", '') == 'tombstone'
+        previous_message_timestamp = event.get("message").get("ts")
+        if isDeleteEvent:
+            return 4, previous_message_timestamp, None, None
+        else:
+            text = event.get("message").get("text")
+            return 3, previous_message_timestamp, None, text
 
     # (4.1) delete message
     if subtype == "message_deleted":
