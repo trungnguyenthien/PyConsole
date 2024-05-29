@@ -30,7 +30,7 @@ def slack_summary(request):
     except Exception as e:
         log(f"Error updating message: {e}")
         return JsonResponse({"response_type": "in_channel","text": "Định dạng yêu cầu không đúng format"})
-    summaries_conversations(request_channel, source_channel, thread_ts)
+    summaries_conversations(text, request_channel, source_channel, thread_ts)
     return JsonResponse({"response_type": "in_channel"}, status=200)
 
 '''
@@ -52,7 +52,7 @@ SAMPLE body_dict
 '''
 
 
-def summaries_conversations(request_channel, source_channel, thread_ts):
+def summaries_conversations(link, request_channel, source_channel, thread_ts):
     # (3) collect all conversions from source channel
     conversations = collect_conversations(source_channel, thread_ts)
     if not conversations:
@@ -65,7 +65,11 @@ def summaries_conversations(request_channel, source_channel, thread_ts):
         log(f'gpt_reply = {gpt_reply}')
 
         # (5) send back to request thread as sub message
-        slack_service.send_new_message(request_channel, gpt_reply)
+        slack_service.send_new_message(request_channel, f"""🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
+Dưới đây là nội dung tóm tắt từ [thread]({link})
+*🤖 CÁC Ý CHÍNH 🤖*
+{gpt_reply}
+""")
 
         log(f'Message has beed sent to vn_channel')
     except Exception as e:
@@ -101,11 +105,6 @@ def get_thread_ts_source_channel(link):
 def get_assistant_summarization(message_text):
     return chatgpt_service.request_text(
         """
-- Hãy dịch đoạn hội thoại bên dưới.
-- Sau khi dịch xong hãy tổng hợp lại theo định dạng như bên dưới:
-🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳----- Translate -----🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
-{Nội dung dịch}
-----------------------------------------------------------------
-*🤖 CÁC Ý CHÍNH 🤖*
-{Nội dung tóm tắt}
+- Hãy tóm tắt các ý chính của nội dung dưới đây, chú ý các cột mốc về thời gian. 
+- Mỗi ý là một dòng ngắn.
 """,message_text)
