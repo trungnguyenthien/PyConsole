@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from .utils import log as logger
 import json
 from .manager import slack as slackManager
+from .manager import slack_cmd as slackCommand
 from django.views.decorators.csrf import csrf_exempt
 from .models import LogRecord, ChannelTsRecord, TaskRecord, SystemMessageRecord
 
@@ -40,3 +41,12 @@ Phần nội dung dưới đây không phải là câu hỏi hoặc yêu cầu, 
 Trong quá trình dịch cần giữ nguyên định dạng MarkDown của message.
 """).save()
     return HttpResponse(f"<h1>RESET DB SUCCESS</h1>")
+
+
+@csrf_exempt
+def slack_summary(request):
+    logger.log('RECEIVE CMD SUMMARY')
+    if request.method != 'POST':
+        logger.log({'error': 'Only POST method is allowed.'})
+        return JsonResponse({'error': 'Only POST method is allowed.'}, status=405)
+    return slackCommand.slack_summary(request)

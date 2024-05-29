@@ -74,3 +74,20 @@ def delete_message(channel_id, message_id):
         return response
     except SlackApiError as e:
         log(f"Error delete message: {e.response['error']}")
+
+
+def get_all_conversions(channel_id, message_id):
+    # Cần phải add con bot vào channel cần lấy message
+    # Example usage:
+    # all_conversions('C1234567890', '1714993823.193669')
+    log(f'all_conversions({channel_id}, {message_id})')
+    try:
+        # Call the chat.chatDelete method using the built-in WebClient
+        response = client.conversations_replies(
+            channel=channel_id,
+            ts=message_id
+        )
+        log(["Load conversations successfully:", response])
+        return response
+    except SlackApiError as e:
+        log(f"Error sending message: {e.response['error']}")

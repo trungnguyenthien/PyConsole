@@ -24,4 +24,5 @@ urlpatterns = [
     path('', app_views.home, name='home'),
     path('events/', app_views.slack_hook, name='events'),
     path('initdb/', app_views.initdb, name='initdb'),
+    path('summary/', app_views.slack_summary, name='summary'),
 ]

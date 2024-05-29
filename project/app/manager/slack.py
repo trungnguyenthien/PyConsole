@@ -5,11 +5,16 @@ import json
 from ..service import slack as slack_service
 from ..service import database as database_service
 from ..service import chatgpt as chatgpt_service
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
+
 # from asgiref.sync import sync_to_async
 
 # async_request_text = sync_to_async(chatgpt_service.request_text, thread_sensitive=False)
 
 response_to_slack_received_event = JsonResponse({'status': 'ok'}, status=200)
+# TODO: Just be a draft values for working-around (Need to be change to use splash command)
+summary_command_list = ["@bot_magic", "@comter", "@MyComter"]
 
 
 def slack_events(request):
@@ -42,7 +47,8 @@ def handle_message_event(json_data):
     # Log thông tin channel
     log(f'handle_message_event CHANNEL_ID = {channel_id}')
     if database_service.is_channel_jp(channel_id) == False:
-        log(f'MESSAGE FROM  VN_CHANNEL --> SKIP')
+        log(f'MESSAGE FROM  VN_CHANNEL --> SKIP (but action command)')
+        handle_command_action(json_data)
         return response_to_slack_received_event
 
     jp_channel = channel_id
@@ -194,6 +200,118 @@ def save_timestamp(jp_channel_id, vn_channel_id, jp_msg_ts, vn_msg_ts):
 
 def get_vn_timestamp(jp_channel_id, jp_msg_ts):
     return database_service.get_message_ts_vn(jp_channel_id, jp_msg_ts)
+
+# SLACK_BOT COMMAND FUNCTIONS ----------------------------------------------------------------
+
+
+def handle_command_action(json_body):
+    # (1) get command type and attributes
+    command_type, request_channel, request_ts, attributes = get_command_attributes(
+        json_body)
+    if command_type == 1:
+        summaries_conversations(request_channel, request_ts, attributes)
+
+
+def summaries_conversations(request_channel, request_ts, attributes):
+    if len(attributes) < 1:
+        return
+
+    # (1) get link that's using for summarizaion
+    link = attributes[0]
+
+    # (2) get source channel and thread_ts
+    source_channel, thread_ts = get_thread_ts_source_channel(link)
+
+    # (3) collect all conversions from source channel
+    conversations = collect_conversations(source_channel, thread_ts)
+    if not conversations:
+        return
+
+    # (4) request chat_gpt to translate
+    gpt_reply = get_assistant_summarization(
+        request_channel, request_ts, conversations)
+
+    try:
+        log(f'gpt_reply = {gpt_reply}')
+
+        # (5) send back to request thread as sub message
+        slack_service.send_sub_message(
+            request_channel, request_ts, gpt_reply)
+
+        log(f'Message has beed sent to vn_channel')
+    except Exception as e:
+        log(f"manager/slack.py>> Error occurred: {e}")
+
+
+def collect_conversations(source_channel, thread_ts):
+    response = slack_service.get_all_conversions(source_channel, thread_ts)
+    all_messages = []
+    for item in response.data["messages"]:
+        # ts = item.get("ts")
+        thread_ts = item.get("thread_ts")
+        text = item.get("text")
+        all_messages.append(f"- {text}")
+
+    message = "\n".join(all_messages)
+    return message
+
+
+# --> 1: Summary action
+def get_command_attributes(json_data):
+    event = json_data["event"]
+
+    command_raw = event.get("text")
+    request_channel = event.get("channel")
+    request_ts = event.get("ts")
+    components = command_raw.split(" ")
+    if len(components) < 2:
+        return -1, request_channel, request_ts, []
+
+    command_type = components[0]
+    if command_type in summary_command_list:
+        attributes = components[1:]
+        return 1, request_channel, request_ts, attributes
+
+    return -1, request_channel, request_ts, []
+
+
+# i.e: <https://ntrung.slack.com/archives/C071P11UWHJ/p1716857049521879?thread_ts=1716856857.662559&cid=C071P11UWHJ>
+def get_thread_ts_source_channel(link):
+    link = link.replace("&amp;", "&")
+    link = link.replace("<", "")
+    link = link.replace(">", "")
+
+    parsed_url = urlparse(link)
+    parsed_qs = parse_qs(parsed_url.query)
+    thread_ts = parsed_qs['thread_ts'][0]
+    source_channel = parsed_qs['cid'][0]
+
+    return source_channel, thread_ts
+
+# TEMPLATE FUNCTIONS ----------------------------------------------------------------
+
+
+def get_assistant_summarization(request_channel, request_ts, message_text):
+    log(f"""
+Received message: {message_text}
+From channel = {request_channel}
+From ts = {request_ts}
+""")
+
+    gpt_reply = chatgpt_service.request_text(
+        """
+- Hãy dịch đoạn hội thoại bên dưới.
+- Sau khi dịch xong hãy tổng hợp lại theo định dạng như bên dưới:
+🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳----- Translate -----🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
+{Nội dung dịch}
+----------------------------------------------------------------
+*🤖 CÁC Ý CHÍNH 🤖*
+{Nội dung tóm tắt}
+""",
+        message_text
+    )
+
+    return gpt_reply
 
 # BOT FUNCTIONS ----------------------------------------------------------------
 
