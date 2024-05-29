@@ -37,7 +37,6 @@ def slack_summary(request):
 SAMPLE body_dict
 
 {
-  'token': 'OifjAOHsLCZZ3u8wvqUF4o7s',
   'team_id': 'TAGSCCP7Z',
   'team_domain': 'ntrung',
   'channel_id': 'C071P11UWHJ',
@@ -48,8 +47,6 @@ SAMPLE body_dict
   'text': 'llll',
   'api_app_id': 'A071NP30LCU',
   'is_enterprise_install': 'false',
-  'response_url': 'https%3A%2F%2Fhooks.slack.com%2Fcommands%2FTAGSCCP7Z%2F7187489248834%2F3nnoeuKaCRtzNIdwwhxSeAdR',
-  'trigger_id': '7200157835345.356896431271.03a872a87805c05d3cc17baeb74e1d74'
 }
 
 '''
