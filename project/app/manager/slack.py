@@ -161,7 +161,7 @@ def message_type_v2(json_body):
     event = json_body["event"]
     type = event.get("type")
     subtype = event.get("subtype")
-    isDeleteEvent = event['event']['message'].get("subtype", '') == 'tombstone'
+    isDeleteEvent = event['message'].get("subtype", '') == 'tombstone'
 
     parent_message_timestamp = event.get("thread_ts")
 
