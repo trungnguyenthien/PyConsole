@@ -146,7 +146,7 @@ message_ts_vn_type = {type(vn_ts)}
 *🤖 CÁC Ý CHÍNH 🤖*
 {summary}"""
 
-    return f'🇻🇳🇻🇳:speech_balloon:<@{user}>:speech_balloon:{gpt_reply}'
+    return f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n:speech_balloon:<@{user}>:speech_balloon: {gpt_reply}'
 
 
 def message_type_v2(json_body):
