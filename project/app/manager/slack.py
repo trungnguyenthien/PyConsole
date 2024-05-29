@@ -69,7 +69,9 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
         json_body)
 
     user = json_body['event'].get('user', '')
-
+    if user == '':
+        user = json_body['event']['message'].get('user', '')
+    
     gpt_reply = get_assistant_message(jp_channel, vn_channel, message_text,
                                       jp_message_timestamp, mssg_type == 3, user)
 
