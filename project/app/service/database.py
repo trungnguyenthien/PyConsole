@@ -14,9 +14,11 @@ def tracked_event(channel, ts):
   log("ENTER tracked_event")
   event = f'{channel}_{ts}'
   if TrackingEventRecord.objects.filter(event=event).exists():
+    log("EXIT tracked_event 1")
     return True
   else:
     TrackingEventRecord(event=event).save()
+    log("EXIT tracked_event 2")
     return False
 
 def get_channel_vn(channel_jp):
