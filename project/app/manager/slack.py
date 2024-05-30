@@ -68,10 +68,13 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
     log("ENTER handle_complex_action")
     mssg_type, jp_message_timestamp, jp_parent_message_timestamp, message_text = message_type_v2(
         json_body)
-
-    user = json_body['event'].get('user', '')
-    if user == '':
-        user = json_body['event']['message'].get('user', '')
+    user = ''
+    try:
+        user = json_body['event'].get('user', '')
+        if user == '':
+            user = json_body['event']['message'].get('user', '')
+    except:
+        pass
     
     gpt_reply = get_assistant_message(jp_channel, vn_channel, message_text,
                                       jp_message_timestamp, mssg_type == 3, user)
@@ -117,6 +120,9 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
 
 
 def get_assistant_message(jp_channel, vn_channel, message_text, jp_ts, is_edited, user):
+    if user != '':
+        user = f':speech_balloon:<@{user}>:speech_balloon:'
+    log("ENTER get_assistant_message")
     log(f'is_channel_jp = {True}')
     vn_channel = database_service.get_channel_vn(jp_channel)
     log(f'vn_channel = {vn_channel}')
@@ -147,7 +153,7 @@ message_ts_vn_type = {type(vn_ts)}
 *🤖 CÁC Ý CHÍNH 🤖*
 {summary}"""
 
-    return f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n:speech_balloon:<@{user}>:speech_balloon: {gpt_reply}'
+    return f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n{user} {gpt_reply}'
 
 
 def message_type_v2(json_body):
