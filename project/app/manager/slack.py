@@ -35,7 +35,6 @@ def slack_events(request):
         return handle_message_event(json_data)
 
     return response_to_slack_received_event
-# <@U07244Q1EHG>
 
 def handle_message_event(json_data):
     channel_id = json_data['event'].get('channel', '')
@@ -146,7 +145,7 @@ message_ts_vn_type = {type(vn_ts)}
 *🤖 CÁC Ý CHÍNH 🤖*
 {summary}"""
 
-    return f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n:speech_balloon:<@{user}>:speech_balloon: {gpt_reply}'
+    return f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n:speech_balloon:<@{user}>:speech_balloon: {gpt_reply}'
 
 
 def message_type_v2(json_body):
@@ -166,18 +165,16 @@ def message_type_v2(json_body):
     # (-1) no action
     if type != "message":
         return -1, None, None, None
-    
+
     # (3) edit message
     if subtype == "message_changed":
-        isDeleteEvent = event['message'].get("subtype", '') == 'tombstone'
-        previous_message_timestamp = event.get("message").get("ts")
-        if isDeleteEvent:
-            return 4, previous_message_timestamp, None, None
-        else:
-            text = event.get("message").get("text")
-            return 3, previous_message_timestamp, None, text
+        # or event.get("previous_message").get("ts")
+        previous_message_timestamp = event.get("message").get(
+            "ts")
+        text = event.get("message").get("text")
+        return 3, previous_message_timestamp, None, text
 
-    # (4.1) delete message
+    # (4) delete message
     if subtype == "message_deleted":
         # or event.get("previous_message").get("ts")
         message_deleted_timestamp = event.get("deleted_ts")
