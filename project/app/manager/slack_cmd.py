@@ -63,7 +63,7 @@ def summaries_conversations(link, request_channel, source_channel, thread_ts):
     # return gpt_reply
     try:
         log(f'gpt_reply = {gpt_reply}')
-
+        link = urllib.parse.unquote(link)
         # (5) send back to request thread as sub message
         slack_service.send_new_message(request_channel, f"""🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
 Dưới đây là nội dung tóm tắt từ [thread]({link})
@@ -106,5 +106,7 @@ def get_assistant_summarization(message_text):
     return chatgpt_service.request_text(
         """
 - Hãy tóm tắt các ý chính của nội dung dưới đây, chú ý các cột mốc về thời gian. 
+- Mở đầu bằng nguyên nhân có cuộc trao đổi này.
+- Lượt bỏ các câu hỏi, chỉ quan tâm đến các quyết định cần làm.
 - Mỗi ý là một dòng ngắn.
-""",message_text)
+""", message_text)
