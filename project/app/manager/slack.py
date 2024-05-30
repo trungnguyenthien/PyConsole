@@ -36,11 +36,9 @@ def slack_events(request):
 
     return response_to_slack_received_event
 
-
 def handle_message_event(json_data):
     channel_id = json_data['event'].get('channel', '')
     event_ts = json_data.get('event_id', '')
-
     if database_service.tracked_event(channel_id, event_ts):
         return response_to_slack_received_event
 
@@ -69,8 +67,12 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
     mssg_type, jp_message_timestamp, jp_parent_message_timestamp, message_text = message_type_v2(
         json_body)
 
+    user = json_body['event'].get('user', '')
+    if user == '':
+        user = json_body['event']['message'].get('user', '')
+    
     gpt_reply = get_assistant_message(jp_channel, vn_channel, message_text,
-                                      jp_message_timestamp, mssg_type == 3)
+                                      jp_message_timestamp, mssg_type == 3, user)
 
     try:
         log(f'gpt_reply = {gpt_reply}')
@@ -112,7 +114,7 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
         log(f"manager/slack.py>> Error occurred: {e}")
 
 
-def get_assistant_message(jp_channel, vn_channel, message_text, jp_ts, is_edited):
+def get_assistant_message(jp_channel, vn_channel, message_text, jp_ts, is_edited, user):
     log(f'is_channel_jp = {True}')
     vn_channel = database_service.get_channel_vn(jp_channel)
     log(f'vn_channel = {vn_channel}')
@@ -143,7 +145,7 @@ message_ts_vn_type = {type(vn_ts)}
 *🤖 CÁC Ý CHÍNH 🤖*
 {summary}"""
 
-    return f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n{gpt_reply}'
+    return f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n:speech_balloon:<@{user}>:speech_balloon: {gpt_reply}'
 
 
 def message_type_v2(json_body):
@@ -156,10 +158,8 @@ def message_type_v2(json_body):
     # 4 : delete message (TODO: delete main and delete sub)
     ############################
     event = json_body["event"]
-
     type = event.get("type")
     subtype = event.get("subtype")
-
     parent_message_timestamp = event.get("thread_ts")
 
     # (-1) no action

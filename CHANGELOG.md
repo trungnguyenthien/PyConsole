@@ -16,3 +16,12 @@ update/delete nội dung tương ứng
 /summary https://ntrung.slack.com/archives/C071P11UWHJ/p1716857049521879?thread_ts=1716856857.662559&cid=C071P11UWHJ
 ```
 Issue: do xử lý đồng bộ nên SlackBot sẽ có thông báo operation_timeout xuất hiện.
+
+
+## trung-add-source
+Thêm nguồn dịch, VD:
+
+:flag-vn::flag-vn::flag-vn::flag-vn::flag-vn::flag-vn:
+@trung
+:speech_balloon:
+Trung1: Phải lập kế hoạch tấn công ngân hàng.
