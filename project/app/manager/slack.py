@@ -37,6 +37,7 @@ def slack_events(request):
     return response_to_slack_received_event
 
 def handle_message_event(json_data):
+    log("ENTER handle_message_event")
     channel_id = json_data['event'].get('channel', '')
     event_ts = json_data.get('event_id', '')
     if database_service.tracked_event(channel_id, event_ts):
@@ -64,6 +65,7 @@ def handle_message_event(json_data):
 
 
 def handle_complex_action(json_body, jp_channel, vn_channel):
+    log("ENTER handle_complex_action")
     mssg_type, jp_message_timestamp, jp_parent_message_timestamp, message_text = message_type_v2(
         json_body)
 
@@ -149,6 +151,7 @@ message_ts_vn_type = {type(vn_ts)}
 
 
 def message_type_v2(json_body):
+    log("ENTER message_type_v2")
     # @return: message_type, message_timestamp, parent_message_timestamp, text
     ####### message_type #######
     # -1: no action

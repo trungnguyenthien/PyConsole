@@ -11,6 +11,7 @@ def is_channel_jp(channel_id):
   return record.exists()
 
 def tracked_event(channel, ts):
+  log("ENTER tracked_event")
   event = f'{channel}_{ts}'
   if TrackingEventRecord.objects.filter(event=event).exists():
     return True
