@@ -66,7 +66,7 @@ def summaries_conversations(link, request_channel, source_channel, thread_ts):
         link = urllib.parse.unquote(link)
         # (5) send back to request thread as sub message
         slack_service.send_new_message(request_channel, f"""🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
-Dưới đây là nội dung tóm tắt từ [thread]({link})
+Dưới đây là nội dung tóm tắt từ {link}
 *🤖 CÁC Ý CHÍNH 🤖*
 {gpt_reply}
 """)
