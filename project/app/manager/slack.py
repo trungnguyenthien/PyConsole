@@ -64,26 +64,31 @@ def handle_message_event(json_data):
 
 
 def handle_complex_action(json_body, jp_channel, vn_channel):
-    mssg_type, jp_message_timestamp, jp_parent_message_timestamp, message_text = message_type_v2(
+    msg_type, jp_message_timestamp, jp_parent_message_timestamp, message_text = message_type_v2(
         json_body)
-
-    user = json_body['event'].get('user', '')
-    if user == '':
-        user = json_body['event']['message'].get('user', '')
+    user = ''
+    try:
+        user = json_body['event'].get('user', '')
+        if user == '':
+            user = json_body['event']['message'].get('user', '')
+    except:
+        pass
     
-    gpt_reply = get_assistant_message(jp_channel, vn_channel, message_text,
-                                      jp_message_timestamp, mssg_type == 3, user)
+    # Không cần sử dụng gpt nếu đây là evejt delete_message
+    if msg_type != 4:
+        gpt_reply = get_assistant_message(jp_channel, vn_channel, message_text,
+                                      jp_message_timestamp, msg_type == 3, user)
 
     try:
         log(f'gpt_reply = {gpt_reply}')
 
-        if mssg_type == 1:  # create new main message
+        if msg_type == 1:  # create new main message
             response = slack_service.send_new_message(vn_channel, gpt_reply)
             vn_message_timestamp = response.get("ts")
             save_timestamp(jp_channel, vn_channel,
                            jp_message_timestamp, vn_message_timestamp)
 
-        if mssg_type == 2:  # create new sub message
+        if msg_type == 2:  # create new sub message
             vn_parent_message_timestamp = get_vn_timestamp(jp_channel,
                                                            jp_parent_message_timestamp)
             if vn_parent_message_timestamp is not None:
@@ -93,7 +98,7 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
                 save_timestamp(jp_channel, vn_channel,
                                jp_message_timestamp, vn_message_timestamp)
 
-        if mssg_type == 3:  # edit message
+        if msg_type == 3:  # edit message
             jp_previous_message_timestamp = jp_message_timestamp
             vn_previous_message_timestamp = get_vn_timestamp(jp_channel,
                                                              jp_previous_message_timestamp)
@@ -101,7 +106,7 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
                 response = slack_service.update_message(
                     vn_channel, vn_previous_message_timestamp, gpt_reply)
 
-        if mssg_type == 4:  # delete message
+        if msg_type == 4:  # delete message
             jp_deleted_message_timestamp = jp_message_timestamp
             vn_deleted_message_timestamp = get_vn_timestamp(jp_channel,
                                                             jp_deleted_message_timestamp)
@@ -115,6 +120,8 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
 
 
 def get_assistant_message(jp_channel, vn_channel, message_text, jp_ts, is_edited, user):
+    if user != '':
+        user = f':speech_balloon:<@{user}>:speech_balloon:'
     log(f'is_channel_jp = {True}')
     vn_channel = database_service.get_channel_vn(jp_channel)
     log(f'vn_channel = {vn_channel}')
@@ -145,7 +152,7 @@ message_ts_vn_type = {type(vn_ts)}
 *🤖 CÁC Ý CHÍNH 🤖*
 {summary}"""
 
-    return f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n:speech_balloon:<@{user}>:speech_balloon: {gpt_reply}'
+    return f'🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳\n{user} {gpt_reply}'
 
 
 def message_type_v2(json_body):

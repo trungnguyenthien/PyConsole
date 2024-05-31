@@ -63,10 +63,10 @@ def summaries_conversations(link, request_channel, source_channel, thread_ts):
     # return gpt_reply
     try:
         log(f'gpt_reply = {gpt_reply}')
-
+        link = urllib.parse.unquote(link)
         # (5) send back to request thread as sub message
         slack_service.send_new_message(request_channel, f"""🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳🇻🇳
-Dưới đây là nội dung tóm tắt từ [thread]({link})
+Dưới đây là nội dung tóm tắt từ {link}
 *🤖 CÁC Ý CHÍNH 🤖*
 {gpt_reply}
 """)
@@ -92,10 +92,23 @@ def collect_conversations(source_channel, thread_ts):
 # i.e: <https://ntrung.slack.com/archives/C071P11UWHJ/p1716857049521879?thread_ts=1716856857.662559&cid=C071P11UWHJ>
 def get_thread_ts_source_channel(link):
     link = urllib.parse.unquote(link)
-    parsed_url = urlparse(link)
-    parsed_qs = parse_qs(parsed_url.query)
-    thread_ts = parsed_qs['thread_ts'][0]
-    source_channel = parsed_qs['cid'][0]
+    # Chia URL thành các phần
+    parts = link.split('/')
+    
+    source_channel = parts[-2]
+    
+    thread_ts = parts[-1]# p1717021859462589
+    thread_ts = thread_ts[1:] # 1717021859462589
+    # Tách chuỗi thành hai phần: 10 số đầu tiên và phần còn lại
+    part1 = thread_ts[:10] #1717021859
+    part2 = thread_ts[10:] #462589
+    # Ghép hai phần lại với dấu chấm giữa chúng
+    thread_ts = f"{part1}.{part2}" #1717021859.462589
+
+    if "thread_ts" in link:
+        parsed_url = urlparse(link)
+        parsed_qs = parse_qs(parsed_url.query)
+        thread_ts = parsed_qs['thread_ts'][0]
 
     return source_channel, thread_ts
 
@@ -106,5 +119,7 @@ def get_assistant_summarization(message_text):
     return chatgpt_service.request_text(
         """
 - Hãy tóm tắt các ý chính của nội dung dưới đây, chú ý các cột mốc về thời gian. 
+- Mở đầu bằng nguyên nhân có cuộc trao đổi này.
+- Lượt bỏ các câu hỏi, chỉ quan tâm đến các quyết định cần làm.
 - Mỗi ý là một dòng ngắn.
-""",message_text)
+""", message_text)
