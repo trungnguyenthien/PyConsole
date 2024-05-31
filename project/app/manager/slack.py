@@ -37,7 +37,6 @@ def slack_events(request):
     return response_to_slack_received_event
 
 def handle_message_event(json_data):
-    log("ENTER handle_message_event")
     channel_id = json_data['event'].get('channel', '')
     event_ts = json_data.get('event_id', '')
     if database_service.tracked_event(channel_id, event_ts):
@@ -65,7 +64,6 @@ def handle_message_event(json_data):
 
 
 def handle_complex_action(json_body, jp_channel, vn_channel):
-    log("ENTER handle_complex_action")
     msg_type, jp_message_timestamp, jp_parent_message_timestamp, message_text = message_type_v2(
         json_body)
     user = ''
@@ -124,7 +122,6 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
 def get_assistant_message(jp_channel, vn_channel, message_text, jp_ts, is_edited, user):
     if user != '':
         user = f':speech_balloon:<@{user}>:speech_balloon:'
-    log("ENTER get_assistant_message")
     log(f'is_channel_jp = {True}')
     vn_channel = database_service.get_channel_vn(jp_channel)
     log(f'vn_channel = {vn_channel}')
@@ -159,7 +156,6 @@ message_ts_vn_type = {type(vn_ts)}
 
 
 def message_type_v2(json_body):
-    log("ENTER message_type_v2")
     # @return: message_type, message_timestamp, parent_message_timestamp, text
     ####### message_type #######
     # -1: no action
