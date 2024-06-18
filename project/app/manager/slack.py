@@ -77,11 +77,10 @@ def handle_complex_action(json_body, jp_channel, vn_channel):
     # Không cần sử dụng gpt nếu đây là evejt delete_message
     if msg_type != 4:
         gpt_reply = get_assistant_message(jp_channel, vn_channel, message_text,
-                                      jp_message_timestamp, msg_type == 3, user)
-
-    try:
+                                          jp_message_timestamp, msg_type == 3, user)
         log(f'gpt_reply = {gpt_reply}')
 
+    try:
         if msg_type == 1:  # create new main message
             response = slack_service.send_new_message(vn_channel, gpt_reply)
             vn_message_timestamp = response.get("ts")
